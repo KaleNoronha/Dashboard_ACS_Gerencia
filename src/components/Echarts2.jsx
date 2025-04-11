@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+import { color } from 'highcharts';
 
 const AreaChartHighchartsStyle = () => {
   const option = {
     title: {
-      text: "Born persons, by boys' name"
+      text: "Cantidad de transacciones por año",
+      left: 'center',
     },
     subtitle: {
-      text: '* Missing data for Yasin in 2019',
-      right: 10,
-      bottom: 10
+      text: 'Cant TRX',
+      color: '#000000',
+      left: 'center',
     },
     tooltip: {
       trigger: 'axis',
@@ -38,18 +40,17 @@ const AreaChartHighchartsStyle = () => {
     },
     yAxis: {
       type: 'value',
-      name: 'Amount'
     },
     series: [
       {
-        name: 'Arvid',
+        name: 'Aceptadas',
         type: 'line',
         smooth: false,
         symbol: 'circle',
         symbolSize: 6, // se corrige SymbolSize -> symbolSize
-        areaStyle: { opacity: 0.5, color: '#3399FF' },
-        itemStyle: { color: '#3399FF' },
-        lineStyle: { color: '#3399FF', width: 1 },
+        areaStyle: { opacity: 0.5, color: '#09E377' },
+        itemStyle: { color: '#09E377' },
+        lineStyle: { color: '#09E377', width: 1 },
         emphasis: {
           // Aumenta grosor y pone opacity=0 para ampliar la zona de hover
           lineStyle: { width: 10, opacity: 0 },
@@ -59,26 +60,43 @@ const AreaChartHighchartsStyle = () => {
         data: [11, 11, 8, 13, 12, 14, 4, 12]
       },
       {
-        name: 'Yasin',
+        name: 'Incompletas',
         type: 'line',
         smooth: false,
         symbol: 'circle',
         symbolSize: 6, // si deseas el mismo tamaño de punto
-        areaStyle: { opacity: 0.5, color: '#6633FF' },
-        itemStyle: { color: '#6633FF' },
-        lineStyle: { color: '#6633FF', width: 1 },
+        areaStyle: { opacity: 0.5, color: '#edff3c' },
+        itemStyle: { color: '#f7ff00' },
+        lineStyle: { color: '#f7ff00', width: 1 },
         // Agrega lo mismo en emphasis si quieres igual “zona de hover”
         emphasis: {
           lineStyle: { width: 10, opacity: 0 },
           focus: 'series',
           blurScope: 'coordinateSystem'
         },
-        data: [10, 10, 8, null, 8, 6, 4, 8]
+        data: [3, 6, 7, 4, 4, 5, 3.9, 3]
+      },
+      {
+        name: 'Negadas',
+        type: 'line',
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: 6, // si deseas el mismo tamaño de punto
+        areaStyle: { opacity: 0.5, color: '#fe1515 ' },
+        itemStyle: { color: '#fe1515 ' },
+        lineStyle: { color: '#fe1515 ', width: 1 },
+        // Agrega lo mismo en emphasis si quieres igual “zona de hover”
+        emphasis: {
+          lineStyle: { width: 10, opacity: 0 },
+          focus: 'series',
+          blurScope: 'coordinateSystem'
+        },
+        data: [1, 3, 2, 6, 3, 2, 3.5, 1]
       }
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '380px', width: '100%' }} />;
+  return <ReactECharts option={option} style={{ height: '400px', width: '80%' }} />;
 };
 
 export default AreaChartHighchartsStyle;

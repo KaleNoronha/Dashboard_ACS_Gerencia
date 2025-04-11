@@ -205,7 +205,7 @@ const EChartsMasterDetail = () => {
           ref={masterRef}
           option={masterOption}
           onChartReady={onMasterChartReady}
-          style={{ height: '110px', width: '700px' }}
+          style={{ height: '110px', width: '900px' }}
         />
       </div>
     </div>

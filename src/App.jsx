@@ -2,9 +2,11 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Echarts from './components/Echarts'
-import Echarts2 from './components/Echarts2'
-import Echarts3 from './components/Echarts3'
+import Echarts from './components/Echarts';
+import Echarts2 from './components/Echarts2';
+import Echarts3 from './components/Echarts3';
+import Echarts4 from './components/Echarts4';
+import Tablet from './components/Tablet';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -34,6 +36,8 @@ function App() {
       <Echarts />
       <Echarts2 />
       <Echarts3 />
+      <Echarts4 />
+      <Tablet />
     </>
   )
 }

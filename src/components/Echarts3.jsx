@@ -47,10 +47,13 @@ const LiveDataChart = () => {
       title: {
         text: 'Flujo de Datos Dinámicos',
         subtext: 'Análisis de Variabilidad',
+        left: 'center',
         textStyle: {
           color: '#333',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          align: 'center'
         }
+        
       },
       grid: {
         top: 80,
@@ -134,7 +137,7 @@ const LiveDataChart = () => {
 
         return updatedData;
       });
-    }, 1000);
+    }, 60000);
 
     // Limpieza
     return () => {
@@ -147,7 +150,7 @@ const LiveDataChart = () => {
     <div 
       ref={chartRef} 
       style={{ 
-        width: '100%', 
+        width: '110%', 
         height: '400px', 
         maxWidth: '900px', 
         margin: '20px auto',
