@@ -10,7 +10,7 @@ const tablet = () => {
         <>
             <table style={{ width: '100%' }}>
                 <tr>
-                    <td style={{ width: '25%', height: '300px', border: '1px solid black' }}> 
+                    <td style={{ width: '25%', height: '300px' }}> 
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                             <Lista />
                         </div>
