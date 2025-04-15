@@ -2,6 +2,7 @@ import React from 'react'
 import Echarts4 from './Echarts4';
 import Echarts3 from './Echarts3';
 import Echarts2 from './Echarts2';
+import Lista from '../view/Lista';
 
 
 const tablet = () => {
@@ -10,7 +11,9 @@ const tablet = () => {
             <table style={{ width: '100%' }}>
                 <tr>
                     <td style={{ width: '25%', height: '300px', border: '1px solid black' }}> 
-
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <Lista />
+                        </div>
                     </td>
                     <td style={{ width: '50%' }}>
                         <div style={{display:'flex', justifyContent:'center',alignItems:'center'}}>
