@@ -25,9 +25,20 @@ app.get("/api/tabla", async (req, res) => {
     await sql.connect(config); // Conexión a SQL Server
 
     const result = await sql.query(`
-      Select * from Ventas.Transacciones
+      exec usp_Transacciones
     `);
 
+    res.json(result.recordset); // Envía los datos al frontend como JSON
+  } catch (err) {
+    console.error("Error al obtener datos:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+app.get("/api/transacciones", async (req, res) => {
+  try {
+    await sql.connect(config); // Conexión a SQL Server
+
+    const result = await sql.query('exec usp_en_jul_2024');
     res.json(result.recordset); // Envía los datos al frontend como JSON
   } catch (err) {
     console.error("Error al obtener datos:", err);

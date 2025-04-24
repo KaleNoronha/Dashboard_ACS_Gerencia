@@ -35,8 +35,8 @@ const Echarts4 = () => {
         "Entel",
         "Banbif",
         "interbank",
-        "banco falabella",
-        "banco pichincha",
+        "banco\nfalabella",
+        "banco\npichincha",
       ],
     },
     series: [
@@ -79,7 +79,7 @@ const Echarts4 = () => {
       {
         name: "Titulo",
         type: "bar",
-        stack: "total", // No apilado
+        stack: "total", 
         data: data3.map(() => 0), // No añade volumen
         label: {
           show: true,
@@ -101,7 +101,7 @@ const Echarts4 = () => {
   return (
     <ReactEcharts
       option={option}
-      style={{ width: "100%", marginLeft: "12%" }}
+      style={{ width: "100%", maxWidth:'750px'}}
     />
   );
 };
