@@ -150,11 +150,10 @@ const LiveDataChart = () => {
     <div 
       ref={chartRef} 
       style={{ 
-        width: '110%', 
+        width: '100%', 
         height: '400px', 
-        maxWidth: '900px', 
+        maxWidth: '700px', 
         margin: '20px auto',
-        borderRadius: '10px',
       }} 
     />
   );

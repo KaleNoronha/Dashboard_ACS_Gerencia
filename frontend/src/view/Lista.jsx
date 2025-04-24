@@ -20,7 +20,8 @@ const Lista = () => {
   return (
     <div
       style={{
-        width: "80%",
+        width: "100%",
+        maxWidth:'300px',
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -30,7 +31,7 @@ const Lista = () => {
       <h3 style={{textAlign:"center"}}>{totaltransaccion()}</h3>
       <h5 style={{ textAlign: "center" }}>Transacciones</h5>
       <table style={{ width: "100%",textAlign:"center" }}>
-        <thead style={{borderBottom:"1px solid black",marginBottom:"10px"}}>
+        <thead style={{border:"1px solid black",marginBottom:"10px"}}>
           <tr>
             <td>Estado </td>
             <td>Q TRX</td>

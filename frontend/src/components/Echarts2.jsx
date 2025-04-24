@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import { color } from 'highcharts';
 
 const AreaChartHighchartsStyle = () => {
   const option = {
@@ -22,10 +21,10 @@ const AreaChartHighchartsStyle = () => {
     },
     legend: {
       orient: 'vertical',
-      left: 150,
+      left: 100,
       top: 60,
       backgroundColor: '#FFFFFF',
-      borderWidth: 1
+      borderWidth: 0.5
     },
     grid: {
       left: '3%',
@@ -47,12 +46,12 @@ const AreaChartHighchartsStyle = () => {
         type: 'line',
         smooth: false,
         symbol: 'circle',
-        symbolSize: 6, // se corrige SymbolSize -> symbolSize
+        symbolSize: 6, 
         areaStyle: { opacity: 0.5, color: '#09E377' },
         itemStyle: { color: '#09E377' },
         lineStyle: { color: '#09E377', width: 1 },
         emphasis: {
-          // Aumenta grosor y pone opacity=0 para ampliar la zona de hover
+          
           lineStyle: { width: 10, opacity: 0 },
           focus: 'series',
           blurScope: 'coordinateSystem'
@@ -64,11 +63,11 @@ const AreaChartHighchartsStyle = () => {
         type: 'line',
         smooth: false,
         symbol: 'circle',
-        symbolSize: 6, // si deseas el mismo tamaño de punto
+        symbolSize: 6, 
         areaStyle: { opacity: 0.5, color: '#edff3c' },
         itemStyle: { color: '#f7ff00' },
         lineStyle: { color: '#f7ff00', width: 1 },
-        // Agrega lo mismo en emphasis si quieres igual “zona de hover”
+        
         emphasis: {
           lineStyle: { width: 10, opacity: 0 },
           focus: 'series',
@@ -81,11 +80,11 @@ const AreaChartHighchartsStyle = () => {
         type: 'line',
         smooth: false,
         symbol: 'circle',
-        symbolSize: 6, // si deseas el mismo tamaño de punto
+        symbolSize: 6,
         areaStyle: { opacity: 0.5, color: '#fe1515 ' },
         itemStyle: { color: '#fe1515 ' },
         lineStyle: { color: '#fe1515 ', width: 1 },
-        // Agrega lo mismo en emphasis si quieres igual “zona de hover”
+        
         emphasis: {
           lineStyle: { width: 10, opacity: 0 },
           focus: 'series',
@@ -96,7 +95,7 @@ const AreaChartHighchartsStyle = () => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '400px', width: '80%' }} />;
+  return <ReactECharts option={option} style={{ height: '500px', width: '100%', maxWidth:'600px' }} />;
 };
 
 export default AreaChartHighchartsStyle;

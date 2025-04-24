@@ -1,44 +1,33 @@
-import React from 'react'
-import Echarts4 from './Echarts4';
-import Echarts3 from './Echarts3';
-import Echarts2 from './Echarts2';
-import Lista from '../view/Lista';
-
+import React from "react";
+import Echarts4 from "./Echarts4";
+// import Echarts3 from './Echarts3';
+import "./Querys.css";
+import Echarts2 from "./Echarts2";
+import ECharts1 from "./Echarts";
+import Lista from "../view/Lista";
 
 const tablet = () => {
-    return (
-        <>
-            <table style={{ width: '100%' }}>
-                <tr>
-                    <td style={{ width: '25%', height: '300px' }}> 
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                            <Lista />
-                        </div>
-                    </td>
-                    <td style={{ width: '50%' }}>
-                        <div style={{display:'flex', justifyContent:'center',alignItems:'center'}}>
-                            <Echarts4/>
-                        </div>
-                    </td>
-                    <td style={{ width: '25%', border: '1px solid black' }}></td>
-                </tr>
-            </table>
-            <table style={{ width: '100%' }}>
-                <tr>
-                    <td style={{ width: '50%', height: '400px' }}>
-                        <div style={{ justifyContent:'center',alignItems:'center',display:'flex',margin:'60px 40px 0px 0px'}}> 
-                            <Echarts2 />
-                        </div>
-                    </td>
-                    <td style={{ width: '50%'}}>
-                        <div style={{display:'flex',justifyContent:'center',alignItems:'center', width:'100%', height:'100%'}}>
-                            <Echarts3 />
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </>
-    )
-}
+  return (
+    <>
+      <div className="tablet">
+        <div className="lista">
+          <Lista />
+        </div>
+        <div className="barras">
+          <Echarts4 />
+        </div>
+        <div></div>
+      </div>
+      <div className="tablet2">
+        <div>
+          <Echarts2 />
+        </div>
+        <div>
+          <ECharts1 />
+        </div>
+      </div>
+    </>
+  );
+};
 
 export default tablet;

@@ -1,0 +1,42 @@
+.tablet{
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows:50% ;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+.lista{
+    padding: 0px 0px 20px 40px;
+}
+.barras{
+    padding: 80px 0px 0px 60px;
+}
+
+.tablet2{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 20px;
+    width: 100%;
+}
+
+.tablet>div:nth-child(5){
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .tablet{
+        display: block;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 10px;
+    }
+    .tablet2{
+        display:flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        margin: auto;
+    }
+}

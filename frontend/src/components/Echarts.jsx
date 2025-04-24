@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import Papa from 'papaparse';
+
 
 const EChartsMasterDetail = () => {
   const [rawData, setRawData] = useState({});
@@ -15,44 +15,46 @@ const EChartsMasterDetail = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      const response = await fetch('/data/transacciones_enero_julio_2024.csv');
-      const csvText = await response.text();
-      Papa.parse(csvText, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          const groupedByCategory = {};
-
-          results.data.forEach(row => {
-            const categoria = row.categoria;
-            const date = new Date(row.fecha);
-            const dayKey = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-            const monto = parseFloat(row.monto);
-            if (!groupedByCategory[categoria]) groupedByCategory[categoria] = {};
-            if (!groupedByCategory[categoria][dayKey]) groupedByCategory[categoria][dayKey] = [];
-            groupedByCategory[categoria][dayKey].push(monto);
-          });
-
-          const averagedByCategory = {};
-
-          Object.entries(groupedByCategory).forEach(([categoria, data]) => {
-            averagedByCategory[categoria] = Object.entries(data).map(([timestamp, montos]) => {
-              const avg = montos.reduce((a, b) => a + b, 0) / montos.length;
-              return { value: [parseInt(timestamp), parseFloat(avg.toFixed(2))] };
-            }).sort((a, b) => a.value[0] - b.value[0]);
-          });
-
-          setRawData(averagedByCategory);
-
-          const refCat = 'correcta';
-          const initial = averagedByCategory[refCat]?.slice(-100) || [];
-          setRange([initial[0]?.value[0] || null, initial[initial.length - 1]?.value[0] || null]);
+      const response = await fetch('http://localhost:3001/api/transacciones');
+      const jsonData = await response.json();
+  
+      const fromDate = new Date(2024, 0, 1);   // 1 Enero 2024
+      const toDate = new Date(2024, 6, 31);    // 31 Julio 2024
+  
+      const groupedByCategory = {};
+  
+      jsonData.forEach(row => {
+        const date = new Date(row.fecha);
+  
+        if (date >= fromDate && date <= toDate) {  // 🎯 Filtrar solo 2024 Enero a Julio
+          const categoria = row.categoria;
+          const dayKey = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+          const monto = parseFloat(row.monto);
+  
+          if (!groupedByCategory[categoria]) groupedByCategory[categoria] = {};
+          if (!groupedByCategory[categoria][dayKey]) groupedByCategory[categoria][dayKey] = [];
+          groupedByCategory[categoria][dayKey].push(monto);
         }
       });
+  
+      const averagedByCategory = {};
+  
+      Object.entries(groupedByCategory).forEach(([categoria, data]) => {
+        averagedByCategory[categoria] = Object.entries(data).map(([timestamp, montos]) => {
+          const avg = montos.reduce((a, b) => a + b, 0) / montos.length;
+          return { value: [parseInt(timestamp), parseFloat(avg.toFixed(2))] };
+        }).sort((a, b) => a.value[0] - b.value[0]);
+      });
+  
+      setRawData(averagedByCategory);
+  
+      const refCat = 'correcta';
+      const initial = averagedByCategory[refCat]?.slice(-100) || [];
+      setRange([initial[0]?.value[0] || null, initial[initial.length - 1]?.value[0] || null]);
     };
     loadData();
   }, []);
-
+  
   useEffect(() => {
     if (!range[0] || !range[1]) return;
     const filtered = {};
@@ -82,11 +84,23 @@ const EChartsMasterDetail = () => {
       lineStyle: { width: 2, color: colors[cat] },
     }));
   };
+  useEffect(() => {
+    const resize = () => {
+      masterRef.current?.getEchartsInstance().resize();
+    };
+  
+    window.addEventListener('resize', resize);
+    setTimeout(resize, 300); 
+  
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+  
 
   const detailOption = {
     title: {
       text: 'Transacciones Promedio Diario: Enero a Julio 2024',
       left: 'center',
+      size:15
     },
     tooltip: {
       trigger: 'axis',
@@ -177,15 +191,14 @@ const EChartsMasterDetail = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h2 style={{ marginBottom: '20px' }}>Gráficos con ECharts</h2>
-      <div style={{ marginBottom: '20px' }}>
+    <div style={{ width:'100%', maxWidth:'600px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div>
         {['correcta', 'cancelada', 'incompleta'].map(cat => (
           <button
             key={cat}
             onClick={() => toggleCategory(cat)}
             style={{
-              marginRight: '10px',
+              marginRight: '5px',
               backgroundColor: categoryFilter[cat] ? '#007bff' : '#ccc',
               color: '#fff',
               padding: '6px 12px',
@@ -199,13 +212,13 @@ const EChartsMasterDetail = () => {
           </button>
         ))}
       </div>
-      <ReactECharts option={detailOption} style={{ height: '350px', width: '100%' }} />
-      <div style={{ marginTop: '-30px' }}>
+      <ReactECharts option={detailOption} style={{ height: '300px', width: '100%' , maxWidth:'850px'}} />
+      <div style={{ width:'100%', marginTop: '-30px' }}>
         <ReactECharts
           ref={masterRef}
           option={masterOption}
           onChartReady={onMasterChartReady}
-          style={{ height: '110px', width: '900px' }}
+          style={{ height: '110px', width: '100%', maxWidth:'700px'}}
         />
       </div>
     </div>
