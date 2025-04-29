@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import './Styles/App.css'
 import Echarts from './components/Echarts';
 import Echarts2 from './components/Echarts2';
 import Echarts3 from './components/Echarts3';

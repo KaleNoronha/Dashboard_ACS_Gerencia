@@ -1,0 +1,141 @@
+/*CSS Componente Tablet*/
+.tablet{
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows:50% ;
+    width: 100%;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+.lista{
+    padding: 0px 0px 20px 40px;
+}
+.barras{
+    padding: 80px 0px 0px 60px;
+}
+
+.tablet2{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 20px;
+    width: 100%;
+}
+
+.tablet>div:nth-child(5){
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .tablet{
+        display: block;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 10px;
+    }
+    .tablet2{
+        display:flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 90%;
+        margin: auto;
+    }
+}
+
+/*css componente Echart*/
+.varE{
+
+    --max-with-master:700px;
+    --max-detalles:700px;
+}
+
+.contenedor{
+    width:100%;
+    max-width: 600px;;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.botones{
+    margin-right: 5px;
+    /* background-color: categoryFilter[cat] ? #007bff : #ccc;  */
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.detalles{
+    height: 300px;
+    width: 100%; 
+    max-width:var(--max-detalles);
+}
+
+.contenedor-master{
+    max-width: var(--max-with-master);
+}
+.master{
+    max-width:var(--max-with-master);
+}
+
+@media(min-width:1280px){
+    .contenedor{
+        max-width: 850px;
+    }
+    .varE{
+        --max-with-master:800px;
+        --max-detalles:800px;
+    }
+
+}
+/*css componente tabletbines*/
+.tabletBines{
+    width: 100%;
+    
+}
+.selects{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0px;
+}
+.table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.trhead{
+    width: 100%;
+    
+}
+
+.acquirer{
+    width: 50%;
+    
+
+}
+.QT{
+    width: 25%;
+    
+}
+.QXT{
+    width: 25%;
+    
+}
+
+.trhead th{
+    border-bottom: skyblue solid 1px;
+    padding: 2%;
+}
+
+.tbody{
+    text-align: center;
+}
+
+.tbody td:nth-child(1),
+.tbody td:nth-child(2)
+{
+    border-right: skyblue solid 1px;
+}
+

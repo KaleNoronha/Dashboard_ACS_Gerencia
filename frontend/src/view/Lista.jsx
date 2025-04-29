@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../Styles/Querys.css'
 
 const Lista = () => {
   const [data, setData] = useState([]);
@@ -30,17 +31,17 @@ const Lista = () => {
     >
       <h3 style={{textAlign:"center"}}>{totaltransaccion()}</h3>
       <h5 style={{ textAlign: "center" }}>Transacciones</h5>
-      <table style={{ width: "100%",textAlign:"center" }}>
-        <thead style={{border:"1px solid black",marginBottom:"10px"}}>
-          <tr>
-            <td>Estado </td>
-            <td>Q TRX</td>
-            <td>%Q TRX</td>
+      <table className="table">
+        <thead style={{marginBottom:"10px"}} >
+          <tr className="trhead">
+            <th >Estado </th>
+            <th>Q TRX</th>
+            <th>%Q TRX</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr className="tbody" key={index}>
               <td>{item.Estado}</td>
               <td>{item.Q_TRX.toLocaleString()}</td>
               <td>{item.Porcentaje_TRX.toFixed(2)}%</td>
