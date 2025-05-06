@@ -1,28 +1,38 @@
+/*----------Variables----------*/
+.varE{
+
+    --max-with-master:700px;
+    --max-detalles:700px;
+    --color-temp:grey;
+    --max-with-Echart:650px;
+
+}
+
 /*CSS Componente Tablet*/
 .tablet{
     display: grid;
-    grid-template-columns: 25% 50% 25%;
-    grid-template-rows:50% ;
+    grid-template-columns:25% 50% 25%;
+    gap: 10px;
+    grid-template-rows:100% ;
     width: 100%;
     margin-bottom: 30px;
-    justify-content: center;
+    align-items: center;
+    padding: 1rem;    
 }
-.lista{
-    padding: 0px 0px 20px 40px;
-}
-.barras{
-    padding: 80px 0px 0px 60px;
+.lista,
+.bines{
+    width: 100%;
 }
 
+.barras{
+    padding-left: 80px;
+}
+/*--------------------------------------*/
 .tablet2{
     display: grid;
     grid-template-columns: 50% 50%;
-    gap: 20px;
+    gap: 5px;
     width: 100%;
-}
-
-.tablet>div:nth-child(5){
-    grid-column: span 2;
 }
 
 @media (max-width: 768px) {
@@ -41,12 +51,8 @@
     }
 }
 
-/*css componente Echart*/
-.varE{
+/*css componente Echart 1*/
 
-    --max-with-master:700px;
-    --max-detalles:700px;
-}
 
 .contenedor{
     width:100%;
@@ -67,7 +73,7 @@
     font-weight: bold;
 }
 .detalles{
-    height: 300px;
+    height: 5000px;
     width: 100%; 
     max-width:var(--max-detalles);
 }
@@ -81,7 +87,8 @@
 
 @media(min-width:1280px){
     .contenedor{
-        max-width: 850px;
+        max-width: 750px;
+        max-height: 900px;
     }
     .varE{
         --max-with-master:800px;
@@ -139,3 +146,84 @@
     border-right: skyblue solid 1px;
 }
 
+.tbody1{
+    text-align: center;
+    
+}
+
+.tbody1 td:nth-child(1)
+{
+    border-right: skyblue solid 1px;
+}
+
+.patron{
+    background-color: var(--color-temp);
+}
+.patron1{
+    background-color: white;
+}
+
+h5{
+    margin: 0px;
+}
+/*----------------Echart4---------------*/
+.contenedor-echart{
+    width: 100%;
+    max-width: 450px; 
+}
+
+@media (min-width:1280px) {
+    .contenedor-echart{
+        max-width: 850px;
+        width: 100%;
+    }
+    
+}
+
+/*--------------lista----------*/
+.contenedor-lista{
+    width: 100%;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+@media(min-with:1024px){
+    .contenedor-lista{
+        width: 90%;
+        max-width: 200px;
+    }
+}
+
+
+@media(min-width:1280px){
+    .contenedor-lista{
+        max-width: 350px;
+        padding-left: 15%;
+    }
+}
+/*------------ECHART 3----------*/
+.contenedor-Echart3{
+    width: 100%; 
+    height: 400px; 
+    max-width:  700px; 
+    margin: 20px auto;
+}
+@media (min-width:1280px){
+    .contenedor-Echart3{
+        width: 80%; 
+        height: 400px; 
+        max-width: 750px; 
+        
+    }
+}
+/*------------ECHART 2----------*/
+.contenedor-echart2{
+    width: 90%;
+    max-width:500px; 
+}
+@media(min-width:1280px){
+    .contenedor-echart2{
+        width: 100%;
+        max-width:800px;
+    }
+}

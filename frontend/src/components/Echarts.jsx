@@ -21,7 +21,7 @@ const EChartsMasterDetail = () => {
       const jsonData = await response.json();
   
       const fromDate = new Date(2024, 0, 1);   // 1 Enero 2024
-      const toDate = new Date(2024, 6, 31);    // 31 Julio 2024
+      const toDate = new Date(2024, 7, 15);    // 31 Julio 2024
   
       const groupedByCategory = {};
   

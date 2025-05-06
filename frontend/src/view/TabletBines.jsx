@@ -13,6 +13,8 @@ const TabletBines = () => {
       .catch((err) => console.log("Error de obtención de datos", err));
   }, []);
 
+
+
   return (
     <div className="tabletBines">
       <div className="selects">
@@ -30,7 +32,7 @@ const TabletBines = () => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr className="tbody" key={index}>
+            <tr className={index%2===0 ? "tbody patron":"tbody patron1"} key={index}>
               <td>{item.idcomercio}</td>
               <td>{item.Q_trx.toLocaleString()}</td>
               <td>{item.PQ_trx}</td>

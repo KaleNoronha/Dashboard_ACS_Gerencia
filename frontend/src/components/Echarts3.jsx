@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
-
+import '../Styles/Querys.css';
 const LiveDataChart = () => {
   const chartRef = useRef(null);
   const [dataPoints, setDataPoints] = useState([]);
 
-  // Función para generar datos más aleatorios con mayor variabilidad
+  
   const generateInitialData = () => {
     const now = new Date();
     const initialData = [];
     
-    // Introducimos más variabilidad con múltiples funciones
     const noiseGenerator = (i) => {
-      // Combinación de funciones para crear patrón más complejo
+      
       return (
-        Math.sin(i * 0.3) * 0.4 +  // Onda senoidal base
-        Math.cos(i * 0.5) * 0.3 +   // Componente de coseno
-        Math.random() * 0.3 +       // Ruido aleatorio
-        0.5                          // Offset para mantener valores positivos
+        Math.sin(i * 0.3) * 0.4 +  
+        Math.cos(i * 0.5) * 0.3 +   
+        Math.random() * 0.3 +       
+        0.5                          
       );
     };
 
@@ -35,11 +34,11 @@ const LiveDataChart = () => {
   };
 
   useEffect(() => {
-    // Inicializar datos
+
     const initialData = generateInitialData();
     setDataPoints(initialData);
 
-    // Crear instancia de gráfico
+    
     const chartInstance = echarts.init(chartRef.current);
 
     // Configuración del gráfico
@@ -111,10 +110,10 @@ const LiveDataChart = () => {
         const generateNoise = () => {
           const timestamp = now.getTime();
           return (
-            Math.sin(timestamp * 0.001) * 0.4 +  // Componente senoidal
-            Math.cos(timestamp * 0.002) * 0.3 +  // Componente de coseno
-            Math.random() * 0.3 +                // Ruido aleatorio
-            0.5                                  // Offset
+            Math.sin(timestamp * 0.001) * 0.4 +  
+            Math.cos(timestamp * 0.002) * 0.3 +  
+            Math.random() * 0.3 +                
+            0.5                                  
           );
         };
 
@@ -149,12 +148,7 @@ const LiveDataChart = () => {
   return (
     <div 
       ref={chartRef} 
-      style={{ 
-        width: '100%', 
-        height: '400px', 
-        maxWidth: '700px', 
-        margin: '20px auto',
-      }} 
+      className='contenedor-Echart3'
     />
   );
 };
