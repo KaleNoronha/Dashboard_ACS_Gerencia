@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
+import '../Styles/Querys.css'
 
 const AreaChartHighchartsStyle = () => {
   const option = {
@@ -95,7 +96,7 @@ const AreaChartHighchartsStyle = () => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '500px', width: '100%', maxWidth:'600px' }} />;
+  return <ReactECharts option={option} style={{ height: '500px'}} className='contenedor-echart2' />;
 };
 
 export default AreaChartHighchartsStyle;

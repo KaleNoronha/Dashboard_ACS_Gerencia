@@ -1,5 +1,6 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import '../Styles/Querys.css'
 
 const Echarts4 = () => {
   function random(min, max) {
@@ -101,7 +102,7 @@ const Echarts4 = () => {
   return (
     <ReactEcharts
       option={option}
-      style={{ width: "100%", maxWidth:'750px'}}
+      className="contenedor-echart"
     />
   );
 };

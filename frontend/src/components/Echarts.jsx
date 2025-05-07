@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
+import '../Styles/Querys.css';
+
 
 
 const EChartsMasterDetail = () => {
@@ -19,7 +21,7 @@ const EChartsMasterDetail = () => {
       const jsonData = await response.json();
   
       const fromDate = new Date(2024, 0, 1);   // 1 Enero 2024
-      const toDate = new Date(2024, 6, 31);    // 31 Julio 2024
+      const toDate = new Date(2024, 7, 15);    // 31 Julio 2024
   
       const groupedByCategory = {};
   
@@ -191,34 +193,27 @@ const EChartsMasterDetail = () => {
   };
 
   return (
-    <div style={{ width:'100%', maxWidth:'600px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div className='contenedor'>
       <div>
         {['correcta', 'cancelada', 'incompleta'].map(cat => (
           <button
             key={cat}
             onClick={() => toggleCategory(cat)}
-            style={{
-              marginRight: '5px',
-              backgroundColor: categoryFilter[cat] ? '#007bff' : '#ccc',
-              color: '#fff',
-              padding: '6px 12px',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
+            style={{backgroundColor: categoryFilter[cat] ? '#007bff' : '#ccc'}}
+            className='botones'
           >
             {cat.charAt(0).toUpperCase() + cat.slice(1)}
           </button>
         ))}
       </div>
-      <ReactECharts option={detailOption} style={{ height: '300px', width: '100%' , maxWidth:'850px'}} />
-      <div style={{ width:'100%', marginTop: '-30px' }}>
+      <ReactECharts option={detailOption} className='detalles' />
+      <div style={{ width:'100%', marginTop: '-30px' }} className='contenedor-master'>
         <ReactECharts
           ref={masterRef}
           option={masterOption}
           onChartReady={onMasterChartReady}
-          style={{ height: '110px', width: '100%', maxWidth:'700px'}}
+          style={{ height: '110px', width: '100%'}}
+          className='master'
         />
       </div>
     </div>

@@ -46,6 +46,32 @@ app.get("/api/transacciones", async (req, res) => {
   }
 });
 
+app.get("/api/comercios",async(req,res)=>{
+  try {
+    await sql.connect(config);
+    const result = await sql.query`exec usp_transac_acquirer`;
+    res.json(result.recordset);
+  } catch (error) {
+    console.error("error con la consulta",error);
+    res.status(500).json({error:"Error en el servidor"});
+  }
+});
+
+app.get("/api/comerciosnombre",async(req,res)=>{
+  try {
+    await sql.connect(config);
+    let bin = req.query.bin || ''; 
+    let trax=req.query.trax || '';
+    let top_bin=req.query.top_bin || '';
+    const result = await sql.query`
+      exec usp_transac_acquirer_filtro @bin = ${bin}, @trax=${trax},@top_bin=${top_bin}`;;
+    res.json(result.recordset);  
+  } catch (error) {
+    console.error("error con la consulta",error);
+    res.status(500).json({error:"Error en el servidor"});
+  }
+});
+
 // ▶️ INICIAR EL SERVIDOR
 app.listen(PORT, () => {
   console.log(`Servidor backend activo en http://localhost:${PORT}`);

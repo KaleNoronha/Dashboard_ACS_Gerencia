@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../Styles/Querys.css'
 
 const Lista = () => {
   const [data, setData] = useState([]);
@@ -18,29 +19,24 @@ const Lista = () => {
   }
 
   return (
-    <div
-      style={{
-        width: "100%",
-        maxWidth:'300px',
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        
-      }}
-    >
-      <h3 style={{textAlign:"center"}}>{totaltransaccion()}</h3>
+    <div className="contenedor-lista">
+      <div className="selects">
+        <select name="" id=""></select>
+        <select name="" id=""></select>
+      </div>
+      <h3 style={{textAlign:"center",padding:'0px',margin:'0px'}}>{totaltransaccion()}</h3>
       <h5 style={{ textAlign: "center" }}>Transacciones</h5>
-      <table style={{ width: "100%",textAlign:"center" }}>
-        <thead style={{border:"1px solid black",marginBottom:"10px"}}>
-          <tr>
-            <td>Estado </td>
-            <td>Q TRX</td>
-            <td>%Q TRX</td>
+      <table className="table">
+        <thead style={{marginBottom:"10px"}} >
+          <tr className="trhead">
+            <th >Estado </th>
+            <th>Q TRX</th>
+            <th>%Q TRX</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr className={index%2===0 ? "tbody1 patron":"tbody1 patron1"} key={index}>
               <td>{item.Estado}</td>
               <td>{item.Q_TRX.toLocaleString()}</td>
               <td>{item.Porcentaje_TRX.toFixed(2)}%</td>
