@@ -64,12 +64,26 @@ const UI = () => {
             <Echarts2 />
           </div>
           <div className="card-tablas">
-            <Lista />
+            <div><h3>Protocolos</h3></div>
+            <div className="titulo-tablas">
+                <h5 className="">Estado</h5>
+                <h5 className="">Q TRX</h5>
+                <h5 className="">%Q TRX</h5>
+            </div>
+            <div><Lista /></div>
           </div>
         </article>
         <article className="conteiner-inferior">
           <div className="card-tablas2">
+            <div> <h3>Bines</h3></div>
+            <div className="titulo-tablas">
+                <h5 className="">AcquirerMerchantID</h5>
+                <h5 className="">Q TRX</h5>
+                <h5 className="">%Q TRX</h5>
+            </div>
+            <div>
             <TableBines />
+            </div>
           </div>
           <div className="card-graficos2">
             <Echart />

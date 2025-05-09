@@ -1,13 +1,10 @@
 /*----------Variables----------*/
 .varE{
-
     --max-with-master:700px;
     --max-detalles:700px;
     --color-temp:grey;
     --max-with-Echart:650px;
-
 }
-
 /*--------------------------------------*/
 .tablet2{
     display: grid;
@@ -73,7 +70,6 @@
         --max-with-master:800px;
         --max-detalles:800px;
     }
-
 }
 /*css componente tabletbines*/
 .tabletBines{
@@ -86,23 +82,32 @@
     padding: 20px 0px;
 }
 .table{
-    width: 100%;
+    width: 90%;
+    border-collapse: collapse ;
+    margin: auto;
 }
 .acquirer{
     width: 50%;
-    
-
 }
 .QT{
     width: 25%;
-    
 }
 .QXT{
     width: 25%;
-    
 }
 .tbody{
     text-align: center;
+}
+.tbody td{
+    padding: 1.5% 1%;
+    border-radius: 0px;
+}
+.tbody:not(:last-child) td{
+    border-bottom: 0.5px solid #F3F3F3;
+}
+.tbody td:nth-child(2),
+.tbody td:nth-child(3){
+    color: #7D818D;
 }
 
 /*----------------Echart4---------------*/
@@ -124,11 +129,18 @@
     
 }
 .table-lista{
-    width: 100%;
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
 }
 .thead-lista{
     width: 100%;
 }
+.col{
+    width: 33.3%;
+}
+
+
 
 /*------------ECHART 3----------*/
 .contenedor-Echart3{
