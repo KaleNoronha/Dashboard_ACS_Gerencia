@@ -17,11 +17,11 @@ const TabletBines = () => {
 
   return (
     <div className="tabletBines">
-      <div className="selects">
+      {/* <div className="selects">
         <select name="nombre" id=""></select>
         <select name="bin" id=""></select>
         <select name="threeDSServerTransID" id=""></select>
-      </div>
+      </div> */}
       <table className="table">
         <thead>
           <tr className="trhead">
@@ -32,7 +32,7 @@ const TabletBines = () => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr className={index%2===0 ? "tbody patron":"tbody patron1"} key={index}>
+            <tr className="tbody" key={index}>
               <td>{item.idcomercio}</td>
               <td>{item.Q_trx.toLocaleString()}</td>
               <td>{item.PQ_trx}</td>

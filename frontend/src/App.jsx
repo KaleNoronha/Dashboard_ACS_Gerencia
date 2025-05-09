@@ -6,7 +6,7 @@ import Echarts from './components/Echarts';
 import Echarts2 from './components/Echarts2';
 import Echarts3 from './components/Echarts3';
 import Echarts4 from './components/Echarts4';
-import Tablet from './components/Tablet';
+import UI from './components/UI';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,7 +37,7 @@ function App() {
       <Echarts2 />
       <Echarts3 />
       <Echarts4 />
-      <Tablet />
+      <UI/>
     </>
   )
 }
