@@ -14,9 +14,9 @@ const Lista = () => {
       <table className="table-lista" >
         <thead className="thead-lista">
           <tr >
-            <th >Estado </th>
-            <th >Q TRX</th>
-            <th >%Q TRX</th>
+            <th className="col"></th>
+            <th className="col"></th>
+            <th className="col"></th>
           </tr>
         </thead>
         <tbody>

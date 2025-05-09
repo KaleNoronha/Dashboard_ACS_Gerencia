@@ -17,17 +17,13 @@ const TabletBines = () => {
 
   return (
     <div className="tabletBines">
-      {/* <div className="selects">
-        <select name="nombre" id=""></select>
-        <select name="bin" id=""></select>
-        <select name="threeDSServerTransID" id=""></select>
-      </div> */}
+
       <table className="table">
         <thead>
           <tr className="trhead">
-            <th className="acquirer">AcquirerMerchantID</th>
-            <th className="QT">Q TRX</th>
-            <th className="QXT">%Q TRX</th>
+            <th className="acquirer"></th>
+            <th className="QT"></th>
+            <th className="QXT"></th>
           </tr>
         </thead>
         <tbody>
