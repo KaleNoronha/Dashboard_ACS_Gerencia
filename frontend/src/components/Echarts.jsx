@@ -207,12 +207,12 @@ const EChartsMasterDetail = () => {
         ))}
       </div>
       <ReactECharts option={detailOption} className='detalles' />
-      <div style={{ width:'100%', marginTop: '-30px' }} className='contenedor-master'>
+      <div style={{ width:'90%', marginTop: '-30px' }} className='contenedor-master'>
         <ReactECharts
           ref={masterRef}
           option={masterOption}
           onChartReady={onMasterChartReady}
-          style={{ height: '110px', width: '100%'}}
+          style={{ height: '100px', width: '100%'}}
           className='master'
         />
       </div>

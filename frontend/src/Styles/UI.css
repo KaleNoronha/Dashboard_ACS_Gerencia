@@ -1,0 +1,93 @@
+*{
+    border-radius: 20px;
+}
+
+.conteiner{
+    width: 100%;
+
+    height:900px;
+    justify-items: center;
+}
+
+.conteiner-filtro{
+    width: 99%;
+    margin: 0%;
+    border-radius: 20px;
+    height: 100px;
+    margin: 10px 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.filtro-card{
+    width: 23.5%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+}
+.card-select{
+    width: 80%;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+    text-align: center;
+    border:0.5px solid gray;
+}
+
+.conteiner-graficos{
+    width: 98%;
+    height: 800px;
+    border-radius:20px;
+}
+.conteiner-superior{
+    width: 100%;
+    height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.conteiner-inferior{
+    width: 100%;
+    height: 390px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+.card-graficos{
+    width: 34%;
+    height: 375px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    
+}
+.card-tablas{
+    width: 28%;
+    height: 375px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}
+.card-tablas2{
+    width: 28%;
+    height: 380px;
+    
+    background-color: white;
+    display: flex;
+    align-items: center;
+
+}
+.card-graficos2{
+    width:70%;
+    height: 380px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}

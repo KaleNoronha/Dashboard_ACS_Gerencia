@@ -96,7 +96,7 @@ const AreaChartHighchartsStyle = () => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '500px'}} className='contenedor-echart2' />;
+  return <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />;
 };
 
 export default AreaChartHighchartsStyle;
