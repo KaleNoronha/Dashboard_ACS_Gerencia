@@ -34,6 +34,20 @@ app.get("/api/tabla", async (req, res) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
+app.get("/api/total_trans", async (req, res) => {
+  try {
+    await sql.connect(config); // Conexión a SQL Server
+
+    const result = await sql.query(`
+      exec usp_total_transaction
+    `);
+
+    res.json(result.recordset); // Envía los datos al frontend como JSON
+  } catch (err) {
+    console.error("Error al obtener datos:", err);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
+});
 app.get("/api/transacciones", async (req, res) => {
   try {
     await sql.connect(config); // Conexión a SQL Server

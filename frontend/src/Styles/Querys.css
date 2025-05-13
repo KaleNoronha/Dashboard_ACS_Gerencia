@@ -96,7 +96,7 @@
     width: 25%;
 }
 .tbody{
-    text-align: center;
+    text-align: initial;
 }
 .tbody td{
     padding: 1.5% 1%;
@@ -113,16 +113,17 @@
 /*----------------Echart4---------------*/
 .contenedor-echart{
     width: 100%;
-    max-width: 450px; 
+    max-width: 400px;
+    height: 350px; 
 }
 
-@media (min-width:1280px) {
+/* @media (min-width:1280px) {
     .contenedor-echart{
-        max-width: 850px;
+        max-width: 600px;
         width: 100%;
     }
     
-}
+} */
 /*--------------lista----------*/
 .contenedor-lista{
     width: 100%;
@@ -160,17 +161,14 @@
 /*------------ECHART 2----------*/
 .contenedor-echart2-principal{
     width: 100%;
-    max-width:500px;
-    min-height: 340px; 
 }
 
 .contenedor-echart2{
-    width: 90%;
-    max-width:500px; 
+    width: 100%; 
 }
-@media(min-width:1280px){
+/* @media(min-width:1280px){
     .contenedor-echart2{
         width: 100%;
         max-width:800px;
     }
-}
+} */

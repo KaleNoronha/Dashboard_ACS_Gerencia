@@ -1,5 +1,6 @@
 * {
     border-radius: 20px;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 .root {
@@ -34,6 +35,22 @@
     background-color: white;
     box-shadow: var(--shadow-regular);
 }
+.filtro-card-text-exter{
+    width: 23.5%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    box-shadow: var(--shadow-regular);
+}
+
+.filtro-card-text-inter{
+    margin: 1px 0px;
+    padding: 0px 20px;
+    color: #7D818D;
+}
 
 .card-select {
     width: 80%;
@@ -41,7 +58,8 @@
     color: black;
     border: 1px solid white;
     text-align: center;
-    border: 0.5px solid gray;
+    border: 0.5px solid #D4D4D7;
+    color: #7D818D;
 }
 
 .conteiner-graficos {
@@ -71,7 +89,8 @@
     height: 375px;
     background-color: white;
     display: flex;
-    align-items: center;
+    justify-content:end;
+    align-items: end;
     box-shadow: var(--shadow-regular);
 }
 
@@ -111,8 +130,11 @@
 }
 .titulo-tablas{
     width: 100%;
-    justify-content: space-around;
+    justify-content:  space-between;
 } 
+.titulo-tablas h5{
+    margin-right: 30px;
+}
 
 .card-tablas2 {
     width: 33%;
@@ -128,7 +150,22 @@
     background-color: white;
     border-bottom-left-radius: 0px ;
     border-bottom-right-radius:0px;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card-tablas2 div:nth-child(1) h3{
+    margin: auto 0px auto 40px;
+}
+
+.card-tablas2-select{
+    width: 20%;
+    height: 20px;
+    border-radius: 0px solid white;
+    border: 0px;
+    background-color: white;
+    color: #456CB4;
+    margin: auto 40px auto 0px;
 }
 .card-tablas2 div:nth-child(2){
     width: 90%;

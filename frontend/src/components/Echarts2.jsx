@@ -21,11 +21,9 @@ const AreaChartHighchartsStyle = () => {
       }
     },
     legend: {
-      orient: 'vertical',
-      left: 100,
-      top: 60,
+      left: 55,
+      top: 300,
       backgroundColor: '#FFFFFF',
-      borderWidth: 0.5
     },
     grid: {
       left: '3%',
@@ -96,7 +94,11 @@ const AreaChartHighchartsStyle = () => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />;
+  return (
+    <div className='contenedor-echart2-principal'>
+      <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />
+    </div>
+  );
 };
 
 export default AreaChartHighchartsStyle;
