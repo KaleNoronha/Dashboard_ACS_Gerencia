@@ -41,8 +41,16 @@ const Echarts4 = () => {
       ],
     },
     legend:{
+      
       show:true,
-      top:"93%"
+      bottom:"0",
+      align:'right',
+      itemGap: 20
+    },
+    grid:{
+      left:'16%',
+      right:'9%',
+      height:'60%',
     },
     series: [
       {
@@ -81,6 +89,10 @@ const Echarts4 = () => {
           position: "inside",
           formatter: "{a}",
         },
+        itemStyle:{
+          borderRadius:[0,10,10,0]
+        },
+        barWidth:"45%"
       },
       {
         name: "Total",
@@ -99,7 +111,7 @@ const Echarts4 = () => {
           fontWeight: "bold",
         },
         itemStyle: {
-          color: "transparent",
+          color: "#7D818D",
         },
       },
     ],

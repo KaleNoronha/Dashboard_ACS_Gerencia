@@ -5,7 +5,7 @@ import Echarts4 from "./Echarts4";
 import Echarts2 from "./Echarts2";
 import Lista from "../view/Lista";
 import TableBines from "../view/TabletBines";
-import { Transaction } from "../../public/Icons/Transaction";
+import { Transaction } from "../Icons/Transaction";
 
 const UI = () => {
   const [data, setData] = useState([]);

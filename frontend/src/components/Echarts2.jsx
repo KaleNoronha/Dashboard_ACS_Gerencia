@@ -20,14 +20,19 @@ const AreaChartHighchartsStyle = () => {
         snap: true
       }
     },
+    dataZoom:{
+      type:'inside',
+      start:0,
+      end:100
+    },
     legend: {
-      left: 55,
-      top: 300,
+      bottom: 15,
       backgroundColor: '#FFFFFF',
+      itemGap:40,
     },
     grid: {
-      left: '3%',
-      right: '4%',
+      left: '5%',
+      right: '5%',
       bottom: '15%',
       containLabel: true
     },

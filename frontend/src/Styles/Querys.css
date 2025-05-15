@@ -39,6 +39,8 @@
     height: 370px;
 }
 
+
+
 .botones{
     margin-right: 5px;
     /* background-color: categoryFilter[cat] ? #007bff : #ccc;  */
@@ -95,8 +97,9 @@
 .QXT{
     width: 25%;
 }
+
 .tbody{
-    text-align: initial;
+    text-align: start;
 }
 .tbody td{
     padding: 1.5% 1%;
@@ -114,20 +117,22 @@
 .contenedor-echart{
     width: 100%;
     max-width: 400px;
-    height: 350px; 
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
 }
 
-/* @media (min-width:1280px) {
+@media (min-width:1280px) {
     .contenedor-echart{
         max-width: 600px;
         width: 100%;
     }
     
-} */
+} 
 /*--------------lista----------*/
 .contenedor-lista{
     width: 100%;
-    
 }
 .table-lista{
     width: 90%;
@@ -140,8 +145,6 @@
 .col{
     width: 33.3%;
 }
-
-
 
 /*------------ECHART 3----------*/
 .contenedor-Echart3{
