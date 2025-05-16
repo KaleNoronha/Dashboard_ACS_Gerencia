@@ -2,10 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './Styles/App.css'
-import Echarts from './components/Echarts';
-import Echarts2 from './components/Echarts2';
 import Echarts3 from './components/Echarts3';
-import Echarts4 from './components/Echarts4';
 import UI from './components/UI';
 
 function App() {
@@ -33,10 +30,8 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <Echarts />
-      <Echarts2 />
       <Echarts3 />
-      <Echarts4 />
+      
       <UI/>
     </>
   )

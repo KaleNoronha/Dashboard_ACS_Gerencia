@@ -20,16 +20,19 @@ const AreaChartHighchartsStyle = () => {
         snap: true
       }
     },
+    dataZoom:{
+      type:'inside',
+      start:0,
+      end:100
+    },
     legend: {
-      orient: 'vertical',
-      left: 100,
-      top: 60,
+      bottom: 15,
       backgroundColor: '#FFFFFF',
-      borderWidth: 0.5
+      itemGap:40,
     },
     grid: {
-      left: '3%',
-      right: '4%',
+      left: '5%',
+      right: '5%',
       bottom: '15%',
       containLabel: true
     },
@@ -96,7 +99,11 @@ const AreaChartHighchartsStyle = () => {
     ]
   };
 
-  return <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />;
+  return (
+    <div className='contenedor-echart2-principal'>
+      <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />
+    </div>
+  );
 };
 
 export default AreaChartHighchartsStyle;

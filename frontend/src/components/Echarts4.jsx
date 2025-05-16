@@ -1,6 +1,6 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import '../Styles/Querys.css'
+import "../Styles/Querys.css";
 
 const Echarts4 = () => {
   function random(min, max) {
@@ -11,21 +11,21 @@ const Echarts4 = () => {
   var data3 = Array.from({ length: 10 }, () => random(200000, 500000));
   const option = {
     title: {
-      text: "Venta por Categoría",
+      text: "Total de Transacciones Bancarias",
       left: "center",
-      subtext: "tipos de prendas ",
+      subtext: "Transacciones por marca",
     },
     tooltip: {},
     xAxis: {
       position: "left",
       max: 1000000,
       axisLabel: {
-        formatter: function(value){
-            if(value>=1000000){
-                return '1M';
-            }else{
-                return value / 1000+'K';
-            }
+        formatter: function (value) {
+          if (value >= 1000000) {
+            return "1M";
+          } else {
+            return value / 1000 + "K";
+          }
         },
       },
     },
@@ -40,15 +40,40 @@ const Echarts4 = () => {
         "banco\npichincha",
       ],
     },
+    legend:{
+      
+      show:true,
+      bottom:"0",
+      align:'right',
+      itemGap: 20
+    },
+    grid:{
+      left:'16%',
+      right:'9%',
+      height:'60%',
+    },
     series: [
       {
         name: "Mastercard",
         type: "bar",
         stack: "total",
         data: data2,
-        color: "#f53015",
+        color: "#EB001B",
         label: {
-          show: true,
+          show: false,
+          position: "inside",
+          formatter: "{a}",
+        },
+      },
+
+      {
+        name: "Visa",
+        type: "bar",
+        data: data3,
+        stack: "total",
+        color: "#142688",
+        label: {
+          show: false,
           position: "inside",
           formatter: "{a}",
         },
@@ -58,29 +83,21 @@ const Echarts4 = () => {
         type: "bar",
         stack: "total",
         data: data,
-        color: "#f8ff22",
+        color: "#2E77BC",
         label: {
-          show: true,
+          show: false,
           position: "inside",
           formatter: "{a}",
         },
+        itemStyle:{
+          borderRadius:[0,10,10,0]
+        },
+        barWidth:"45%"
       },
       {
-        name: "Visa",
+        name: "Total",
         type: "bar",
-        data: data3,
         stack: "total",
-        color: "#1460e7",
-        label: {
-          show: true,
-          position: "inside",
-          formatter: "{a}",
-        },
-      },
-      {
-        name: "Titulo",
-        type: "bar",
-        stack: "total", 
         data: data3.map(() => 0), // No añade volumen
         label: {
           show: true,
@@ -88,22 +105,21 @@ const Echarts4 = () => {
           formatter: function (params) {
             const i = params.dataIndex;
             const totalValue = data[i] + data2[i] + data3[i];
-            return totalValue.toLocaleString(); 
+            return totalValue.toLocaleString();
           },
-          color: "#000",
+          color: "#7D818D",
           fontWeight: "bold",
         },
         itemStyle: {
-          color: "transparent",
+          color: "#7D818D",
         },
       },
     ],
   };
   return (
-    <ReactEcharts
-      option={option}
-      className="contenedor-echart"
-    />
+    <div className="contenedor-echart">
+      <ReactEcharts option={option} className="contenedor-echart" />
+    </div>
   );
 };
 
