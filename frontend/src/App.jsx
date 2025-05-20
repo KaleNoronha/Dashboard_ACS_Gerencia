@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './Styles/App.css'
-import Echarts3 from './components/Echarts3';
-import UI from './components/UI';
+import './Styles/Global/App.css'
+import Echarts3 from './components/ModelEcharts/Echarts3';
+import UI from './view/UI';
 
 function App() {
   const [count, setCount] = useState(0)

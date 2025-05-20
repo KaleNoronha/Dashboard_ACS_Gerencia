@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import '../Styles/Querys.css'
+import '../../Styles/Querys/Querys.css'
 
 const AreaChartHighchartsStyle = () => {
   const option = {

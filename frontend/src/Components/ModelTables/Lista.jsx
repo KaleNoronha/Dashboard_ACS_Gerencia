@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../Styles/Querys.css'
+import '../../Styles/Querys/Querys.css'
 
 const Lista = () => {
   const [data, setData] = useState([]);

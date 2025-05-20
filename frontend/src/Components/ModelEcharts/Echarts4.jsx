@@ -1,6 +1,6 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
-import "../Styles/Querys.css";
+import '../../Styles/Querys/Querys.css';
 
 const Echarts4 = () => {
   function random(min, max) {

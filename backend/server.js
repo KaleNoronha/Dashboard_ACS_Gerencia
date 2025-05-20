@@ -22,13 +22,13 @@ const config = {
 // 🚀 RUTA QUE OBTIENE DATOS DE LA TABLA
 app.get("/api/tabla", async (req, res) => {
   try {
-    await sql.connect(config); // Conexión a SQL Server
+    await sql.connect(config);
 
     const result = await sql.query(`
       exec usp_Transacciones
     `);
 
-    res.json(result.recordset); // Envía los datos al frontend como JSON
+    res.json(result.recordset);
   } catch (err) {
     console.error("Error al obtener datos:", err);
     res.status(500).json({ error: "Error en el servidor" });
@@ -37,13 +37,13 @@ app.get("/api/tabla", async (req, res) => {
 
 app.get("/api/bins", async (req, res) => {
   try {
-    await sql.connect(config); // Conexión a SQL Server
+    await sql.connect(config);
 
     const result = await sql.query(`
       exec usp_bines
     `);
 
-    res.json(result.recordset); // Envía los datos al frontend como JSON
+    res.json(result.recordset);
   } catch (err) {
     console.error("Error al obtener datos:", err);
     res.status(500).json({ error: "Error en el servidor" });
@@ -51,41 +51,45 @@ app.get("/api/bins", async (req, res) => {
 });
 
 app.get('/api/transacciones-por-bin', async (req, res) => {
-  const bin = req.query.bin || '';  // Si no pasa ?bin=, queda vacío
-  const trax = req.query.trax || '';
-  const top_bin = req.query.top_bin || '';
+  
+  const {
+    bin     = '',    // p.ej. '100030'
+    tranx   = '',    // p.ej. 'TX3001'
+    top_bin = '0'    // '1' o '0'
+  } = req.query;
+
   try {
-    // 1) Conectar
-    await sql.connect(config);
+    // 2) Conectamos y obtenemos el pool
+    const pool = await sql.connect(config);
 
-    // 2) Preparar la petición y el parámetro
-    const request = new sql.Request();
-    request.input('bin', sql.Char(6), bin);
-    request.input('trax', sql.VarChar(8), trax);
-    request.input('top_bin', sql.Bit, top_bin);
+    // 3) Creamos la request y le pasamos los inputs
+    const request = pool.request();
+    request.input('bin',     sql.Char(6),     bin);
+    request.input('trax',    sql.VarChar(10), tranx);
+    request.input('top_bin', sql.Bit,         top_bin === '1');
 
-    // 3) Ejecutar el SP
+    // 4) Ejecutamos el SP
     const result = await request.execute('usp_transac_acquirer_filtro');
 
-    // 4) Enviar los datos al cliente
+    // 5) Devolvemos el recordset al cliente
     res.json(result.recordset);
   } catch (err) {
     console.error('Error en /api/transacciones-por-bin:', err);
-    res.status(500).json({ error: 'Error al ejecutar el procedimiento' });
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });
 
 app.get("/api/total_trans", async (req, res) => {
   try {
-    await sql.connect(config); // Conexión a SQL Server
+    await sql.connect(config);
 
     const result = await sql.query(`
       exec usp_total_transaction
     `);
 
-    res.json(result.recordset); // Envía los datos al frontend como JSON
+    res.json(result.recordset);
   } catch (err) {
-    console.error("Error al obtener datos:", err);
+    console.error("Error /api/total_trans", err);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
@@ -93,22 +97,31 @@ app.get("/api/transacciones", async (req, res) => {
   try {
     await sql.connect(config); // Conexión a SQL Server
 
-    const result = await sql.query('exec usp_en_jul_2024');
+    const result = await sql.query("exec usp_en_jul_2024");
     res.json(result.recordset); // Envía los datos al frontend como JSON
   } catch (err) {
-    console.error("Error al obtener datos:", err);
+    console.error("Error /api/transacciones", err);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
-
-app.get("/api/comercios",async(req,res)=>{
+app.get('/api/search-transacciones', async (req, res) => {
+  const { q = '', offset = 0, limit = 50 } = req.query;
   try {
-    await sql.connect(config);
-    const result = await sql.query`exec usp_transac_acquirer`;
+    // Conectar y obtener el pool
+    const pool = await sql.connect(config);
+
+    // Crear la request a partir del pool
+    const request = pool.request();
+    request.input('prefijo', sql.VarChar(10), q);
+    request.input('offset',  sql.Int,        parseInt(offset, 10));
+    request.input('limit',   sql.Int,        parseInt(limit, 10));
+
+    // Ejecutar el SP
+    const result = await request.execute('usp_nro_transaccion');
     res.json(result.recordset);
-  } catch (error) {
-    console.error("error con la consulta",error);
-    res.status(500).json({error:"Error en el servidor"});
+  } catch (err) {
+    console.error('Error en /api/search-transacciones:', err);
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });
 

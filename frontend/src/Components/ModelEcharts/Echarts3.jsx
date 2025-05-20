@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
-import '../Styles/Querys.css';
+import '../../Styles/Querys/Querys.css';
 const LiveDataChart = () => {
   const chartRef = useRef(null);
   const [dataPoints, setDataPoints] = useState([]);
