@@ -1,7 +1,8 @@
 /*----------Variables----------*/
 .varE{
-    --max-with-master:700px;
-    --max-detalles:700px;
+    --max-width-Echart1:650px
+    --max-with-master:650px;
+    --max-detalles:650px;
     --color-temp:grey;
     --max-with-Echart:650px;
 }
@@ -32,27 +33,27 @@
 /*css componente Echart 1*/
 .contenedor{
     width:100%;
-    max-width: 500px;;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 370px;
+    flex-direction: row;
+    
 }
 
-
+.contenedor-botones{
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+}
 
 .botones{
-    margin-right: 5px;
-    /* background-color: categoryFilter[cat] ? #007bff : #ccc;  */
+    margin-right:40px ;
     color: #fff;
-    padding: 6px 12px;
+    padding: 3px 6px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: bold;
 }
 .detalles{
-    width: 90%; 
+    width: 100%; 
     max-width:var(--max-detalles);
 }
 
@@ -65,8 +66,7 @@
 
 @media(min-width:1280px){
     .contenedor{
-        max-width: 750px;
-        max-height: 900px;
+        max-width: 1100px;
     }
     .varE{
         --max-with-master:800px;
@@ -76,6 +76,7 @@
 /*css componente tabletbines*/
 .tabletBines{
     width: 100%;
+    text-align: center;
 }
 .selects{
     width: 100%;
