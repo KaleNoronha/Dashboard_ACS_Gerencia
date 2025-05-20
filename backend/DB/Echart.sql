@@ -20,6 +20,37 @@ values
 ('I',19,0.00)
 go
 
+select *
+from Ventas.Transacciones
+go
+
+select 
+	Estado,
+	Q_TRX,
+	Porcentaje_TRX,
+	count(*) as veces
+from Ventas.Transacciones
+group by 
+Estado,
+Q_TRX,
+Porcentaje_TRX
+HAVING COUNT(*)>1
+go
+
+
+WITH CTE_Duplicados AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER (
+      PARTITION BY 	Estado,
+		Q_TRX,
+		Porcentaje_TRX
+      ORDER BY (SELECT 0)
+    ) AS rn
+  FROM Ventas.Transacciones
+)
+DELETE FROM CTE_Duplicados
+WHERE rn > 1;
 
 
 create schema Periodo
@@ -214,6 +245,33 @@ go
 
 exec usp_en_jul_2024
 go
+
+-- Crea un índice no clusterizado sobre id_tra
+CREATE NONCLUSTERED INDEX IX_En_Jul_2024_id_tra
+ON Periodo.En_Jul_2024 (id_tra);
+GO
+
+-- Crea un índice no clusterizado sobre idbin (o bin_prefix, según tu DDL)
+CREATE NONCLUSTERED INDEX IX_En_Jul_2024_idbin
+ON Periodo.En_Jul_2024 (bin_prefix);
+GO
+
+CREATE NONCLUSTERED INDEX IX_Bines_idcomercio
+ON Compras.Bines (bin_prefix);
+GO
+
+CREATE NONCLUSTERED INDEX IX_Compras_comercios_fecha
+ON Compras.Comercios (idcomercio);
+GO
+
+CREATE NONCLUSTERED INDEX IX_En_Jul_2024_idcategoria
+ON Periodo.En_Jul_2024 (Categoria);
+GO
+
+UPDATE STATISTICS Periodo.En_Jul_2024 WITH FULLSCAN;
+GO
+
+
 /*==================================consultas========================================*/
 create or alter proc usp_Transacciones
 as 
@@ -222,6 +280,8 @@ select
 	*
 from 
 	Ventas.Transacciones
+order by Q_TRX desc
+
 end
 go
 
@@ -238,30 +298,44 @@ go
 
 exec usp_en_jul_2024
 go
+
+create or alter proc usp_total_transaction
+as
+select
+	count(*)as total
+from
+	Periodo.En_Jul_2024
+go
+
+exec usp_total_transaction
+
+
 alter table Periodo.En_Jul_2024 
 alter column bin_prefix char(6) not null
 go
 
-create or alter proc usp_transaccion_comercio
-@nombre varchar(20)=''
+create or alter proc usp_transaccion_filtros
+@nombre varchar(20)='',
+@bin	varchar(6) ='',
+@tracxio varchar(10)=''
 as
 begin
 select 
-	b.bin_prefix,
-	c.nombre,
-	e.id_tra,
-	e.fecha,
-	e.monto
+	c.idcomercio,
+	COUNT(e.id_tra) as Q_trx,
+	format(COUNT(e.id_tra)*100.0/sum(COUNT(e.id_tra))over(),'N2')+'%' PQ_trx 
 from 
-	Compras.Comercios c join Compras.Bines b
-	on c.idcomercio=b.idcomercio join Periodo.En_Jul_2024 e
+	Compras.Comercios c 
+	join Compras.Bines b
+	on c.idcomercio=b.idcomercio 
+	join Periodo.En_Jul_2024 e
 	on e.bin_prefix=b.bin_prefix
 where
 	(c.nombre=@nombre or @nombre='')
 end
 go
 
-exec usp_transaccion_comercio @nombre='Banco Pacifico'
+exec usp_transaccion_comercio
 go
 
 create or alter proc usp_transacciones_comercio_total
@@ -280,7 +354,7 @@ end
 go
 
 exec usp_en_jul_2024 
-go
+go 
 
 create or alter proc usp_transac_acquirer
 
@@ -288,8 +362,9 @@ as
 	select
 		c.idcomercio,
 		count(e.id_tra) as Q_trx,
-		COUNT(e.id_tra)*100.0
-		/SUM(COUNT(e.id_tra))over () as pct_trx
+		FORMAT(COUNT(e.id_tra)*100.0
+		/SUM(COUNT(e.id_tra))over(),
+		'N2')+ '%' as PQ_trx
 	from
 		Compras.Comercios c join Compras.Bines b
 		on c.idcomercio=b.idcomercio join Periodo.En_Jul_2024 e
@@ -297,4 +372,200 @@ as
 	group by 
 		c.idcomercio
 	order by c.idcomercio asc 
+go
+
+
+exec usp_transac_acquirer 
+go
+
+
+CREATE OR ALTER PROC usp_transac_acquirer_filtro
+  @bin    CHAR(6)     = '',   -- filtrar sólo este BIN (vacío = todos)
+  @trax        VARCHAR(10) = '',   -- filtrar sólo esta transacción (vacío = todas)
+  @top_bin  BIT         = 0     -- 1 = muestra todos los BINs ordenados desc; 0 = agrega por comercio
+AS
+BEGIN
+  IF @top_bin = 1
+  BEGIN
+    -- Devuelve todos los BINs ordenados por número de transacciones (descendente)
+    SELECT
+      c.idcomercio,
+      COUNT(e.id_tra) AS Q_trx,
+	  FORMAT(
+      COUNT(e.id_tra) * 100.0
+      / SUM(COUNT(e.id_tra)) OVER(),
+      'N2'
+    ) + '%' AS PQ_trx
+    FROM Periodo.En_Jul_2024 e
+    JOIN Compras.Bines b
+      ON b.bin_prefix = e.bin_prefix
+	join Compras.Comercios c
+	  on b.idcomercio = c.idcomercio
+    WHERE
+      (@bin = '' OR b.bin_prefix = @bin)
+      AND (@trax     = '' OR e.id_tra     = @trax)
+    GROUP BY c.idcomercio,c.nombre,b.bin_prefix
+    ORDER BY COUNT(e.id_tra) desc;
+
+    RETURN;
+  END
+
+  -- Si @solo_top_bin = 0, agrega por comercio y muestra porcentaje
+  SELECT
+    c.idcomercio,
+    COUNT(e.id_tra) AS Q_trx,
+    FORMAT(
+      COUNT(e.id_tra) * 100.0
+      / SUM(COUNT(e.id_tra)) OVER(),
+      'N2'
+    ) + '%' AS PQ_trx
+  FROM Compras.Comercios c
+  JOIN Compras.Bines      b
+    ON c.idcomercio = b.idcomercio
+  JOIN Periodo.En_Jul_2024 e
+    ON b.bin_prefix = e.bin_prefix
+  WHERE
+    (@bin = '' OR b.bin_prefix = @bin)
+    AND (@trax     = '' OR e.id_tra     = @trax)
+  GROUP BY
+    c.idcomercio
+  ORDER BY
+    COUNT(e.id_tra) desc;
+END;
+GO
+
+exec usp_transac_acquirer_filtro @bin='',@trax='TX1000123',@top_bin=0
+go
+
+CREATE OR ALTER PROC usp_transac_acquirer_filtro
+  @bin       CHAR(6)     = '',    -- filtrar por BIN (vacío = todos)
+  @trax      VARCHAR(10) = '',    -- filtrar por ID de transacción (vacío = todos)
+  @top_bin   BIT         = 0,     -- 1 = ordenar por cantidad desc.; 0 = por comercio asc.
+  @offset    INT         = 0,     -- para paginación: número de filas a saltar
+  @limit     INT         = 50     -- para paginación: número de filas a traer
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  IF @top_bin = 1
+  BEGIN
+    SELECT
+      c.idcomercio,
+      COUNT(e.id_tra) AS Q_trx,
+      FORMAT(
+        COUNT(e.id_tra)*100.0
+        / SUM(COUNT(e.id_tra)) OVER(),
+        'N2'
+      ) + '%' AS PQ_trx
+    FROM Compras.Comercios    AS c
+    JOIN Compras.Bines       AS b  ON c.idcomercio = b.idcomercio
+    JOIN Periodo.En_Jul_2024 AS e  ON b.bin_prefix      = e.bin_prefix
+    WHERE
+      (@bin  = ''   OR b.bin_prefix  = @bin)
+      AND (@trax = '' OR e.id_tra = @trax)
+    GROUP BY
+      c.idcomercio
+    ORDER BY
+      COUNT(e.id_tra) DESC
+    OFFSET @offset ROWS
+    FETCH NEXT @limit ROWS ONLY;
+    RETURN;
+  END
+
+  SELECT
+    c.idcomercio,
+    COUNT(e.id_tra) AS Q_trx,
+    FORMAT(
+      COUNT(e.id_tra)*100.0
+      / SUM(COUNT(e.id_tra)) OVER(),
+      'N2'
+    ) + '%' AS PQ_trx
+  FROM Compras.Comercios    AS c
+  JOIN Compras.Bines       AS b  ON c.idcomercio = b.idcomercio
+  JOIN Periodo.En_Jul_2024 AS e  ON b.bin_prefix      = e.bin_prefix
+  WHERE
+    (@bin  = ''   OR b.bin_prefix  = @bin)
+    AND (@trax = '' OR e.id_tra = @trax)
+  GROUP BY
+    c.idcomercio
+  ORDER BY
+    COUNT(e.id_tra) desc
+  OFFSET @offset ROWS
+  FETCH NEXT @limit ROWS ONLY;
+END;
+GO
+
+
+select * from Periodo.En_Jul_2024 p
+	where  (p.fecha between '2024-07-13' and  '2024-08-13') and
+	p.bin_prefix='100030'
+	
+	group by
+	p.bin_prefix,
+	p.id_tra,
+	p.fecha,
+	p.categoria,
+	p.monto
+go
+
+select * from Periodo.En_Jul_2024
+go
+
+INSERT INTO Periodo.En_Jul_2024 (id_tra, fecha, categoria, monto, bin_prefix)
+VALUES
+  ('TX9999605','2024-02-01','correcta',   125.50,'100030'),
+  ('TX9999606','2024-02-02','cancelada',   340.00,'100030'),
+  ('TX9999607','2024-02-03','correcta',    75.25,'100030'),
+  ('TX9999608','2024-02-04','correcta',  50.10,'100030'),
+  ('TX9999609','2024-02-05','incompleta',  200.00,'100030'),
+  ('TX9999610','2024-02-06','correcta',   410.75,'100030'),
+  ('TX9999611','2024-02-07','cancelada',  150.30,'100030'),
+  ('TX9999612','2024-02-08','correcta',   320.90,'100030'),
+  ('TX9999613','2024-02-09','incompleta',  60.40,'100030'),
+  ('TX9999614','2024-02-10','incompleta',   95.00,'100030'),
+  ('TX9999615','2024-02-11','correcta',   280.20,'100030'),
+  ('TX9999616','2024-02-12','cancelada',  130.50,'100030'),
+  ('TX9999617','2024-02-13','correcta',    75.60,'100030'),
+  ('TX9999618','2024-02-14','incompleta',  40.80,'100030'),
+  ('TX9999619','2024-02-15','correcta',  165.45,'100030')
+go
+
+insert into Compras.Comercios values
+('654665869','test')
+go
+
+insert into Compras.Bines values
+('100030','654665869')
+go
+
+create or alter proc usp_bines
+as
+select 
+	b.bin_prefix
+from 
+	Compras.Bines b
+go
+
+exec usp_bines
+go
+
+CREATE OR ALTER PROC usp_nro_transaccion
+  @prefijo VARCHAR(10) = '',
+  @offset  INT         = 0,
+  @limit   INT         = 50
+AS
+BEGIN
+  SELECT
+    p.id_tra
+  FROM Periodo.En_Jul_2024 AS p
+  WHERE
+    (@prefijo = '' OR p.id_tra LIKE @prefijo + '%')
+  ORDER BY p.id_tra
+  OFFSET @offset ROWS
+  FETCH NEXT @limit ROWS ONLY;
+END;
+GO
+
+
+exec usp_nro_transaccion @prefijo='' ,@limit=10 
 go
