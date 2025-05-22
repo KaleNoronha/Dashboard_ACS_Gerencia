@@ -8,10 +8,7 @@ import TableBines from "../Components/ModelTables/TabletBines";
 import { Transaction } from "../Icons/Transaction";
 import { useFetch } from "../hooks";
 import { AsyncPaginate } from "react-select-async-paginate";
-import {
-  loadNroTransOptions,
-  pageSize,
-} from "../Components/ModelTables/NroTransSelect";
+import { loadNroTransOptions } from "../Components/ModelTables/NroTransSelect";
 
 const UI = () => {
   const {
@@ -62,25 +59,23 @@ const UI = () => {
             placeholder="Buscar transacción..."
             debounceTimeout={300}
           />
-          <select name="" id="" className="card-select">
-            <option value="">option 1</option>
-          </select>
-        </div>
-        <div className="filtro-card">
-          <select name="" id="" className="card-select">
-            <option value="">option 1</option>
-          </select>
-          {/* <select name="" id="" className="card-select">
-            <option value="">option 1</option>
-          </select> */}
           <label>
             <input
               type="checkbox"
               checked={topBin}
               onChange={(e) => setTopBin(e.target.checked)}
+              className=""
             />
             Ordenar por Top BIN
           </label>
+        </div>
+        <div className="filtro-card">
+          <select name="" id="" className="card-select">
+            <option value="">option 1</option>
+          </select>
+          <select name="" id="" className="card-select">
+            <option value="">option 1</option>
+          </select>
         </div>
         <div className="filtro-card"></div>
         <div className="filtro-card-text-exter">

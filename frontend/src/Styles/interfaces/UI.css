@@ -152,12 +152,9 @@
 
 .titulo-tablas {
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
-.titulo-tablas h5 {
-    margin-right: 30px;
-}
 
 .card-tablas2 {
     width: 33%;
@@ -193,7 +190,6 @@
 }
 
 .card-tablas2 div:nth-child(2) {
-    width: 90%;
     height: 40px;
     margin: auto;
     background-color: #f6f8fa;
@@ -205,10 +201,13 @@
 
 .card-tablas2 div:nth-child(3) {
     width: 100%;
-    height: 290px;
+    flex-grow: 1;
+    overflow: hidden;
     background-color: white;
-    border-top-right-radius: 0px;
+    display: flex;
+    flex-direction: column;
     border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 .card-graficos2 {
@@ -217,6 +216,7 @@
     background-color: white;
     box-shadow: var(--shadow-regular);
 }
-.card-graficos2 div:nth-child(1){
+
+.card-graficos2 div:nth-child(1) {
     width: 100%;
 }
