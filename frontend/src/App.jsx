@@ -4,6 +4,9 @@ import viteLogo from '/vite.svg'
 import './Styles/Global/App.css'
 import Echarts3 from './components/ModelEcharts/Echarts3';
 import UI from './view/UI';
+import DS from './view/3DS';
+import ACS from './view/ACS';
+import Test from './view/test';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -33,6 +36,14 @@ function App() {
       <Echarts3 />
       
       <UI/>
+      <br /><br /><br /><br />
+      <Test/>
+      <br /><br /><br /><br />
+      <DS/>
+      <br /><br /><br /><br />
+      <ACS/> 
+      <br /><br /><br /><br />
+      
     </>
   )
 }
