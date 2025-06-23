@@ -1,14 +1,64 @@
 import React, { useEffect, useState } from "react";
 import "../../Styles/Querys/Querys.css";
+import { fetchACS } from "../../services/api";
 
 const Lista = () => {
-  const [data, setData] = useState([]);
+  const [hits, setHits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:3001/api/tabla")
-      .then((res) => res.json())
-      .then((data) => setData(data))
-      .catch((err) => console.log("error de obtencion de datos", err));
+    const bodyACS = {
+      size: 10000,
+      from: 0,
+      query: {
+        bool: {
+          filter: [
+            { match: { "TDS_TRANSACTION.issuerId": "041" } },
+            {
+              range: {
+                "TDS_TRANSACTION.createdAt": {
+                  gte: "2025-01-01T00:00:00",
+                  lte: "2025-06-30T20:10:11"
+                }
+              }
+            }
+          ]
+        }
+      },
+      _source: [
+        "TDS_ARES.transStatus",
+        "TDS_TRANSACTION.brand"
+      ],
+      sort: [
+        { "TDS_TRANSACTION.createdAt": { order: "desc" } },
+        "_score"
+      ]
+    };
+
+    fetchACS(bodyACS)
+      .then(setHits)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, []);
+  const agrupadoPorStatus = {};
+  hits.forEach(hit => {
+    const s = hit._source || {};
+    const status = s.TDS_ARES?.transStatus ?? "—";
+    agrupadoPorStatus[status] = (agrupadoPorStatus[status] || 0) + 1;
+  });
+
+  const totalGlobal = Object.values(agrupadoPorStatus).reduce((a, b) => a + b, 0);
+
+  const tablaFinal = Object.entries(agrupadoPorStatus)
+    .map(([status, cantidad]) => ({
+      status,
+      cantidad,
+      porcentaje: totalGlobal > 0 ? ((cantidad / totalGlobal) * 100).toFixed(2) : "0.00"
+    }))
+    .sort((a, b) => b.cantidad - a.cantidad);
+
+  if (loading) return <p className="p-4">Cargando datos…</p>;
+  if (error) return <p className="p-4 text-red-600">Error: {error}</p>;
   return (
     <div className="contenedor-lista">
       <div className="scroll-container">
@@ -21,11 +71,11 @@ const Lista = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {tablaFinal.map((item, index) => (
               <tr className="tbody" key={index}>
-                <td>{item.Estado}</td>
-                <td>{item.Q_TRX.toLocaleString()}</td>
-                <td>{item.Porcentaje_TRX.toFixed(2)}%</td>
+                <td>{item.status}</td>
+                <td>{item.cantidad}</td>
+                <td>{item.porcentaje}%</td>
               </tr>
             ))}
           </tbody>

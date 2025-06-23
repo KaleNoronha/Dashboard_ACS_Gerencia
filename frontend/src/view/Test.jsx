@@ -1,97 +1,95 @@
 import React, { useState, useEffect } from "react";
-import { fetch3DS } from "../services/api";
+import { fetchACS } from "../services/api";
 
-export default function Test() {
+export default function TablaStatusTransaccionesACS() {
     const [hits, setHits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const body = {
+        const bodyACS = {
+            size: 10000,
             from: 0,
-            size: 10,
             query: {
                 bool: {
-                    must: [{
-                        match: {
-                            "authentication_log_response.response_content.vci": "TSYS"
-                        }
-                    }],
                     filter: [
-                        {
-                            term: {
-                                "TDS_PARQ.acquirerBIN": "4444",
-
-                            },
-                        },
-
+                        { match: { "TDS_TRANSACTION.issuerId": "041" } },
                         {
                             range: {
-                                "versioning_log_request.creationDate": {
-                                    gte: "2025/01/01 00:00:00",
-                                    lt: "2025/06/27 00:00:00"
-                                },
-                            },
-                        },
-                    ],
-                },
+                                "TDS_TRANSACTION.createdAt": {
+                                    gte: "2025-01-01T00:00:00",
+                                    lte: "2025-06-30T20:10:11"
+                                }
+                            }
+                        }
+                    ]
+                }
             },
             _source: [
-                "authentication_log_response.response_content.vci",
-                "TDS_PARQ.acquirerBIN",
-                "TDS_PARQ.merchantName",
-                "TDS_PARQ.purchaseAmount",
-                "versioning_log_request.creationDate",
-                "versioning_log_request.authorization_key",
+                "TDS_ARES.transStatus",
+                "TDS_TRANSACTION.brand"
             ],
-            sort: [{ "versioning_log_request.creationDate": { order: "desc" } }],
+            sort: [
+                { "TDS_TRANSACTION.createdAt": { order: "desc" } },
+                "_score"
+            ]
         };
-        fetch3DS(body)
+
+        fetchACS(bodyACS)
             .then(setHits)
-            .catch((err) => setError(err.message))
+            .catch((e) => setError(e.message))
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <p className="p-4">cargando datos</p>;
+    // Agrupar por status
+    const agrupadoPorStatus = {};
+    hits.forEach(hit => {
+        const s = hit._source || {};
+        const status = s.TDS_ARES?.transStatus ?? "—";
+        agrupadoPorStatus[status] = (agrupadoPorStatus[status] || 0) + 1;
+    });
+
+    const totalGlobal = Object.values(agrupadoPorStatus).reduce((a, b) => a + b, 0);
+
+    const tablaFinal = Object.entries(agrupadoPorStatus)
+        .map(([status, cantidad]) => ({
+            status,
+            cantidad,
+            porcentaje: totalGlobal > 0 ? ((cantidad / totalGlobal) * 100).toFixed(2) : "0.00"
+        }))
+        .sort((a, b) => b.cantidad - a.cantidad);
+
+    if (loading) return <p className="p-4">Cargando datos…</p>;
     if (error) return <p className="p-4 text-red-600">Error: {error}</p>;
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Resultados Tabla Personalizada</h1>
-            <div className="overflow-x-auto">
-                <table className="min-w-full border text-xs">
-                    <thead className="bg-gray-100">
+        <div className="overflow-x-auto shadow-lg rounded-lg border border-blue-200 bg-white max-w-screen-md mx-auto my-6">
+            <h2 className="text-2xl font-bold mb-4 text-blue-900 px-4 pt-4">
+                Resumen de Transacciones por Status (ACS)
+            </h2>
+            <div className="max-h-[500px] overflow-y-auto">
+                <table className="min-w-full text-sm">
+                    <thead className="sticky top-0 z-10 bg-blue-600 text-white">
                         <tr>
-                            <th className="p-2 border">#</th>
-                            <th className="p-2 border">BIN</th>
-                            <th className="p-2 border">VCI</th>
-                            <th className="p-2 border">Empresa</th>
-                            <th className="p-2 border">Monto</th>
-                            <th className="p-2 border">Fecha</th>
+                            <th className="px-3 py-2 text-left">Status</th>
+                            <th className="px-3 py-2 text-center">Cantidad</th>
+                            <th className="px-3 py-2 text-center">% del Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {hits.map((hit, i) => {
-                            const s = hit._source || {};
-                            const parq = s.TDS_PARQ || {};
-                            const version = s.versioning_log_request || {};
-                            const authLog = s.authentication_log_response?.response_content || {};
-                            return (
-                                <tr key={i} className="odd:bg-white even:bg-gray-50">
-                                    <td className="p-2 border text-center">{i + 1}</td>
-                                    <td className="p-2 border">{parq.acquirerBIN ?? "—"}</td>
-                                    <td className="p-2 border">{authLog.vci ?? "—"}</td>
-                                    <td className="p-2 border">{parq.merchantName ?? "—"}</td>
-                                    <td className="p-2 border">{parq.purchaseAmount ?? "—"}</td>
-                                    <td className="p-2 border">{version.creationDate ? 
-                                        new Date(version.creationDate.replace(/\//g, "-")).toLocaleString("es-PE") : "—"}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {tablaFinal.map((row, i) => (
+                            <tr key={i} className={i % 2 === 0 ? "bg-blue-50" : ""}>
+                                <td className="px-3 py-2 font-semibold">{row.status}</td>
+                                <td className="px-3 py-2 text-center">{row.cantidad}</td>
+                                <td className="px-3 py-2 text-center">{row.porcentaje}%</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
+            <p className="text-xs text-gray-400 mt-2 ml-2 pb-4">
+                Total general: <span className="font-semibold">{totalGlobal}</span> transacciones.
+            </p>
         </div>
     );
 }

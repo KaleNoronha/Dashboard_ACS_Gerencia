@@ -1,6 +1,4 @@
-
 * {
-    border-radius: 20px;
     font-family: "Inter", system-ui, sans-serif;
 }
 
@@ -35,17 +33,19 @@
     align-items: center;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .filtro-card-text-exter {
     width: 23.5%;
     height: 100px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 @keyframes slideUpFast {
@@ -113,6 +113,7 @@
     justify-content: end;
     align-items: end;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .card-tablas {
@@ -125,17 +126,19 @@
 }
 
 .card-tablas div:nth-child(1) {
+    width: 100%;
     height: 50px;
     background-color: white;
-    text-align: center;
-    
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .card-tablas div:nth-child(2) {
     width: 90%;
     height: 40px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
     display: flex;
     flex-direction: row;
     color: #d4d4d7;
@@ -143,15 +146,19 @@
 
 .card-tablas div:nth-child(3) {
     width: 100%;
-    height: 280px;
+    flex-grow: 1;
+    overflow: hidden;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .titulo-tablas {
     width: 100%;
     justify-content: space-around;
 }
-
 
 .card-tablas2 {
     width: 33%;
@@ -165,8 +172,8 @@
     width: 100%;
     height: 50px;
     background-color: white;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -203,8 +210,8 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .card-graficos2 {
@@ -212,6 +219,7 @@
     height: 380px;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .card-graficos2 div:nth-child(1) {

@@ -26,9 +26,9 @@ const AreaChartHighchartsStyle = () => {
       end:100
     },
     legend: {
-      bottom: 15,
+      bottom: 0,
       backgroundColor: '#FFFFFF',
-      itemGap:40,
+      itemGap:10,
     },
     grid: {
       left: '5%',
@@ -100,8 +100,8 @@ const AreaChartHighchartsStyle = () => {
   };
 
   return (
-    <div className='contenedor-echart2-principal'>
-      <ReactECharts option={option} style={{ height: '340px'}} className='contenedor-echart2' />
+    <div className="w-full max-w-4xl mx-auto p-2">
+      <ReactECharts option={option} style={{ height: '340px', width: '100%' }} className="w-full" />
     </div>
   );
 };

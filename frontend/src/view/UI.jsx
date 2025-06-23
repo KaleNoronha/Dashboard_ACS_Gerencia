@@ -5,10 +5,10 @@ import Echarts4 from "../Components/ModelEcharts/Echarts4";
 import Echarts2 from "../Components/ModelEcharts/Echarts2";
 import Lista from "../Components/ModelTables/Lista";
 import TableBines from "../Components/ModelTables/TabletBines";
-import { Transaction } from "../Icons/Transaction";
 import { useFetch } from "../hooks";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { loadNroTransOptions } from "../Components/ModelTables/NroTransSelect";
+import Total from "../Components/ModelTables/TotalTransactions";
 
 const UI = () => {
   const {
@@ -41,6 +41,7 @@ const UI = () => {
     return <p>Cargando datos…</p>;
   if (errTabla || errTotal || errorBins) return <p>Error al cargar datos.</p>;
 
+
   return (
     <div className="conteiner">
       <aside className="conteiner-filtro">
@@ -59,6 +60,15 @@ const UI = () => {
             placeholder="Buscar transacción..."
             debounceTimeout={300}
           />
+  
+        </div>
+        <div className="filtro-card">
+          <select name="" id="" className="card-select">
+            <option value="">Opción Extra</option>
+          </select>
+
+        </div>
+        <div className="filtro-card">
           <label>
             <input
               type="checkbox"
@@ -69,37 +79,16 @@ const UI = () => {
             Ordenar por Top BIN
           </label>
         </div>
-        <div className="filtro-card">
-          <select name="" id="" className="card-select">
-            <option value="">option 1</option>
-          </select>
-          <select name="" id="" className="card-select">
-            <option value="">option 1</option>
-          </select>
-        </div>
-        <div className="filtro-card"></div>
         <div className="filtro-card-text-exter">
-          <div>
-            <h5 className="filtro-card-text-inter">Transacciones</h5>
-            {totalTrans?.map((item, idx) => (
-              <h3
-                className="filtro-card-text-inter"
-                key={idx}
-                style={{ animationDelay: `${idx * 0.05}s` }}
-              >
-                {item.total.toLocaleString()}
-              </h3>
-            ))}
-          </div>
-          <div>
-            <Transaction />
-          </div>
+          <h5>Total de transacciones</h5>
+          <Total />
         </div>
       </aside>
       <section className="conteiner-graficos">
         <article className="conteiner-superior">
           <div className="card-graficos">
             <Echarts4 />
+
           </div>
           <div className="card-graficos">
             <Echarts2 />

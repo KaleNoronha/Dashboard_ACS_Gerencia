@@ -59,6 +59,7 @@ export default function App() {
             ]
         };
 
+
         fetchACS(bodyACS)
             .then(setHits)
             .catch((e) => setError(e.message))
@@ -90,6 +91,7 @@ export default function App() {
                             const s = hit._source || {};
                             const areq = s.TDS_AREQ || {};
                             const tx = s.TDS_TRANSACTION || {};
+                            console.log(hits)
                             return (
                                 <tr key={i} className={i % 2 ? "bg-blue-50" : ""}>
                                     <td className="border px-1 py-1 text-center font-semibold text-blue-700">{i + 1}</td>
@@ -111,6 +113,7 @@ export default function App() {
                                 </tr>
                             );
                         })}
+                        
                     </tbody>
                 </table>
             </div>
