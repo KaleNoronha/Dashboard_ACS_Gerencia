@@ -1,5 +1,4 @@
 * {
-    border-radius: 20px;
     font-family: "Inter", system-ui, sans-serif;
 }
 
@@ -9,17 +8,15 @@
 }
 
 .conteiner {
-    width: 100%;
+    width: 1150px;
     height: 900px;
     justify-items: center;
 }
 
 .conteiner-filtro {
-    width: 99%;
+    width: 100%;
     margin: 0%;
-    border-radius: 20px;
     height: 100px;
-    margin: 10px 10px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -34,17 +31,19 @@
     align-items: center;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .filtro-card-text-exter {
     width: 23.5%;
     height: 100px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 @keyframes slideUpFast {
@@ -59,19 +58,6 @@
     }
 }
 
-.filtro-card-text-inter {
-    opacity: 0;
-    /* parte invisible */
-    animation-name: slideUpFast;
-    animation-duration: 0.15s;
-    /* muy rápido */
-    animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
-    margin: 1px 0px;
-    padding: 0px 20px;
-    color: #7d818d;
-}
-
 .card-select {
     width: 80%;
     background-color: white;
@@ -83,9 +69,8 @@
 }
 
 .conteiner-graficos {
-    width: 98%;
+    width: 100%;
     height: 800px;
-    border-radius: 20px;
 }
 
 .conteiner-superior {
@@ -112,6 +97,7 @@
     justify-content: end;
     align-items: end;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .card-tablas {
@@ -127,16 +113,16 @@
     width: 100%;
     height: 50px;
     background-color: white;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .card-tablas div:nth-child(2) {
     width: 90%;
-    margin: auto;
     height: 40px;
-    border-radius: 0px;
     display: flex;
     flex-direction: row;
     color: #d4d4d7;
@@ -144,17 +130,19 @@
 
 .card-tablas div:nth-child(3) {
     width: 100%;
-    height: 280px;
+    flex-grow: 1;
+    overflow: hidden;
     background-color: white;
-    border-top-right-radius: 0px;
-    border-top-left-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .titulo-tablas {
     width: 100%;
     justify-content: space-around;
 }
-
 
 .card-tablas2 {
     width: 33%;
@@ -168,8 +156,8 @@
     width: 100%;
     height: 50px;
     background-color: white;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -206,8 +194,8 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .card-graficos2 {
@@ -215,6 +203,7 @@
     height: 380px;
     background-color: white;
     box-shadow: var(--shadow-regular);
+    border-radius: 20px;
 }
 
 .card-graficos2 div:nth-child(1) {

@@ -1,0 +1,97 @@
+import { useState, useEffect, useRef } from "react";
+import { fetchACS } from "../../services/api";
+import { Negadas } from "../../Icons/Negadas";
+
+function formatAbbreviatedNumber(num) {
+    if (num === null || num === undefined) return "0";
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + "M";
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + "K";
+    return num.toLocaleString();
+}
+
+export default function KPI_N() {
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [displayTotal, setDisplayTotal] = useState(0);
+    const animRef = useRef();
+
+    useEffect(() => {
+        const bodyACS = {
+            size: 10000,
+            from: 0,
+            query: {
+                bool: {
+                    filter: [
+                        { match: { "TDS_TRANSACTION.issuerId": "041" } },
+                        { match: { "TDS_ARES.transStatus": "N" } },
+                        {
+                            range: {
+                                "TDS_TRANSACTION.createdAt": {
+                                    gte: "2024-01-01T00:00:00",
+                                    lte: "2025-06-30T20:10:11"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            _source: [
+                "TDS_ARES.transStatus",
+                "TDS_TRANSACTION.brand"
+            ],
+            sort: [
+                { "TDS_TRANSACTION.createdAt": { order: "desc" } },
+                "_score"
+            ]
+        };
+
+        fetchACS(bodyACS)
+            .then(hits => {
+                setTotal(hits.length);
+                setLoading(false);
+            })
+            .catch((e) => {
+                setError(e.message);
+                setLoading(false);
+            });
+    }, []);
+
+    // Animación de conteo
+    useEffect(() => {
+        if (!loading && !error) {
+            const duration = 1200; // ms
+            const startTime = performance.now();
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(progress * total);
+                setDisplayTotal(value);
+                if (progress < 1) {
+                    animRef.current = requestAnimationFrame(animate);
+                } else {
+                    setDisplayTotal(total);
+                }
+            }
+            animRef.current = requestAnimationFrame(animate);
+            return () => cancelAnimationFrame(animRef.current);
+        }
+    }, [loading, error, total]);
+
+    if (error) return <span className="text-red-600">Error: {error}</span>;
+
+    return (
+        <div className="flex items-center">
+            <div className="flex-1">
+                <div className="text-gray-500 text-sm">Transacciones Negativas</div>
+                <div className="text-3xl font-bold text-black mt-1">
+                    {formatAbbreviatedNumber(displayTotal)}
+                </div>
+            </div>
+            <div className="ml-4">
+                <Negadas className="w-10 h-10 text-red-500" />
+            </div>
+        </div>
+    );
+}

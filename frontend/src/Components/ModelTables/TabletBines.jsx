@@ -1,61 +1,64 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../../Styles/Querys/Querys.css";
+import { fetchACS } from "../../services/api";
 
 const TabletBines = ({ bin, tranx, top_bin }) => {
-  const [offset, setOffset] = useState(0);
-  const [rows, setRows] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-
-  const limit = 7;
-  const sentinelRef = useRef();
-
-  // Construye la URL dinámica según el parámetro `bin`
-  const buildURL = () => {
-    const params = new URLSearchParams();
-    if (bin) params.append("bin", bin);
-    if (tranx) params.append("tranx", tranx);
-    params.append("top_bin", top_bin);
-    return `http://localhost:3001/api/transacciones-por-bin?${params.toString()}`;
-  };
+  const [hits, setHits] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    const fetchMore = async () => {
-      setLoading(true);
-      const res = await fetch(buildURL());
-      const data = await res.json();
-
-      // 👇 IMPORTANTE
-      setRows((prev) => {
-        const ids = new Set(prev.map((i) => i.idcomercio));
-        const nuevos = data.filter((i) => !ids.has(i.idcomercio));
-        return offset === 0 ? data : [...prev, ...nuevos];
-      });
-
-      setHasMore(data.length === limit);
-      setLoading(false);
+    const bodyACS = {
+      size: 10000,
+      from: 0,
+      query: {
+        bool: {
+          filter: [
+            { match: { "TDS_TRANSACTION.issuerId": "041" } },
+            {
+              range: {
+                "TDS_TRANSACTION.createdAt": {
+                  gte: "2024-01-01T00:00:00",
+                  lte: "2025-06-30T20:10:11"
+                }
+              }
+            }
+          ]
+        }
+      },
+      _source: [
+        "TDS_AREQ.merchantName",
+        "TDS_TRANSACTION.brand"
+      ],
+      sort: [
+        { "TDS_TRANSACTION.createdAt": { order: "desc" } },
+        "_score"
+      ]
     };
 
-    fetchMore();
-  }, [offset, bin, tranx, top_bin]);
+    fetchACS(bodyACS)
+      .then(setHits)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+  const agrupadoPorComercio = {};
+  hits.forEach(hit => {
+    const s = hit._source || {};
+    const comercio = s.TDS_AREQ?.merchantName ?? "—";
+    agrupadoPorComercio[comercio] = (agrupadoPorComercio[comercio] || 0) + 1;
+  });
 
-  // Reset si cambia filtro
-  useEffect(() => {
-    setOffset(0);
-    setRows([]);
-    setHasMore(true);
-  }, [bin, tranx, top_bin]);
+  const totalGlobal = Object.values(agrupadoPorComercio).reduce((a, b) => a + b, 0);
 
-  useEffect(() => {
-    if (!sentinelRef.current) return;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore && !loading) {
-        setOffset((prev) => prev + limit);
-      }
-    });
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, [sentinelRef, hasMore, loading]);
+  const tablaFinal = Object.entries(agrupadoPorComercio)
+    .map(([comercio, cantidad]) => ({
+      comercio,
+      cantidad,
+      porcentaje: totalGlobal > 0 ? ((cantidad / totalGlobal) * 100).toFixed(2) : "0.00"
+    }))
+    .sort((a, b) => b.cantidad - a.cantidad);
 
+  if (loading) return <p className="p-4">Cargando datos…</p>;
+  if (error) return <p className="p-4 text-red-600">Error: {error}</p>;
   return (
     <div className="tabletBines">
       <div className="scroll-container">
@@ -68,20 +71,16 @@ const TabletBines = ({ bin, tranx, top_bin }) => {
             </tr>
           </thead>
           <tbody>
-            {rows.map((item, idx) => (
+            {tablaFinal.map((item, idx) => (
               <tr key={idx} className="tbody">
-                <td>{item.idcomercio}</td>
-                <td>{item.Q_trx.toLocaleString()}</td>
-                <td>{item.PQ_trx}</td>
+                <td style={{ fontSize: "15px" }}>{item.comercio}</td>
+                <td>{item.cantidad}</td>
+                <td>{item.porcentaje}%</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div >
-          <div ref={sentinelRef} style={{ height: "1px", width: "100%" }} />
-          {loading && <p style={{ textAlign: "center" }}>Cargando más…</p>}
-        </div>
-        
+
       </div>
     </div>
   );

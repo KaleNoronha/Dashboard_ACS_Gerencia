@@ -35,7 +35,7 @@
 .contenedor {
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
 }
 
@@ -151,6 +151,24 @@
     color: #7D818D;
     text-align: center;
 }
+/*--------------lista----------*/
+.contenedor-lista {
+    width: 100%;
+    height: 100%;
+}
+
+.table-lista {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.thead-lista {
+    width: 100%;
+}
+
+.col {
+    width: 33.3%;
+}
 
 /*----------------Echart4---------------*/
 .contenedor-echart {
@@ -170,24 +188,6 @@
 
 }
 
-/*--------------lista----------*/
-.contenedor-lista {
-    width: 100%;
-}
-
-.table-lista {
-    width: 90%;
-    margin: auto;
-    border-collapse: collapse;
-}
-
-.thead-lista {
-    width: 100%;
-}
-
-.col {
-    width: 33.3%;
-}
 
 /*------------ECHART 3----------*/
 .contenedor-Echart3 {
