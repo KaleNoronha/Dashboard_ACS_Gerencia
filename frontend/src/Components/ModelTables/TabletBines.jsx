@@ -17,7 +17,7 @@ const TabletBines = ({ bin, tranx, top_bin }) => {
             {
               range: {
                 "TDS_TRANSACTION.createdAt": {
-                  gte: "2025-01-01T00:00:00",
+                  gte: "2024-01-01T00:00:00",
                   lte: "2025-06-30T20:10:11"
                 }
               }
@@ -73,7 +73,7 @@ const TabletBines = ({ bin, tranx, top_bin }) => {
           <tbody>
             {tablaFinal.map((item, idx) => (
               <tr key={idx} className="tbody">
-                <td style={{ fontSize: "10px" }}>{item.comercio}</td>
+                <td style={{ fontSize: "15px" }}>{item.comercio}</td>
                 <td>{item.cantidad}</td>
                 <td>{item.porcentaje}%</td>
               </tr>

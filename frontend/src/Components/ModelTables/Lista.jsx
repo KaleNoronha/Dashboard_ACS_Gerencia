@@ -17,7 +17,7 @@ const Lista = () => {
             {
               range: {
                 "TDS_TRANSACTION.createdAt": {
-                  gte: "2025-01-01T00:00:00",
+                  gte: "2024-01-01T00:00:00",
                   lte: "2025-06-30T20:10:11"
                 }
               }

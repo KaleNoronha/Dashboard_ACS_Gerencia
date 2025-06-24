@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { fetchACS } from "../../services/api";
-import { Transaction } from "../../Icons/Transaction"
+import { Aceptadas } from "../../Icons/Aceptadas";
 
+function formatAbbreviatedNumber(num) {
+    if (num === null || num === undefined) return "0";
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + "M";
+    if (num >= 1e3) return (num / 1e3).toFixed(1) + "K";
+    return num.toLocaleString();
+}
 
-export default function TotalTransaccionesACS() {
+export default function KPI_Y() {
     const [total, setTotal] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,6 +22,7 @@ export default function TotalTransaccionesACS() {
                 bool: {
                     filter: [
                         { match: { "TDS_TRANSACTION.issuerId": "041" } },
+                        { match: { "TDS_ARES.transStatus": "Y" } },
                         {
                             range: {
                                 "TDS_TRANSACTION.createdAt": {
@@ -46,23 +53,16 @@ export default function TotalTransaccionesACS() {
     if (loading) return <span>Cargando…</span>;
     if (error) return <span className="text-red-600">Error: {error}</span>;
 
-    function formatAbbreviatedNumber(num) {
-        if (num >= 1e9) return (num / 1e9).toFixed(2) + "B";
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + "M";
-        if (num >= 1e3) return (num / 1e3).toFixed(2) + "K";
-        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-    // Solo muestra el número (puedes retornarlo como prop, estado, etc.)
     return (
         <div className="flex items-center">
             <div className="flex-1">
-                <div className="text-gray-500 text-sm">Total Transacciones</div>
-                <div className="text-3xl font-bold text-black mt-1">
+                <div className="text-gray-500 text-sm">Transacciones Aceptadas</div>
+                <div className="text-3xl font-bold text-black ">
                     {formatAbbreviatedNumber(total)}
                 </div>
             </div>
-            <div className="ml-4">
-                <Transaction className="w-10 h-10 text-blue-500" />
+            <div >
+                <Aceptadas className="w-5 h-10 text-green-500" />
             </div>
         </div>
     );

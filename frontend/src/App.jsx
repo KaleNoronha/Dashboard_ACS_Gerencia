@@ -2,12 +2,12 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './Styles/Global/App.css'
-import Echarts3 from './components/ModelEcharts/Echarts3';
+
 import UI from './view/UI';
-import Test from './view/test';
+
 
 function App() {
-  const [count, setCount] = useState(0);
+
 
   return (
     <div className="flex min-h-screen">
@@ -138,10 +138,10 @@ function App() {
           <span>Dark</span>
         </button>
       </div>
-      <div style={{ width: '10vw', minWidth: '80px', maxWidth: '200px' }} className="flex-shrink-0" />
+      <div style={{ width: '12vw', minWidth: '10px', maxWidth: '900px' }} className="flex-shrink-0" />
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        <div className="flex gap-4 mb-4">
+      <div className="flex-1 py-10">
+        <div className="flex gap-4 mb-4 items-center justify-center">
           <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
             <img src={viteLogo} className="h-16" alt="Vite logo" />
           </a>
@@ -149,24 +149,13 @@ function App() {
             <img src={reactLogo} className="h-16" alt="React logo" />
           </a>
         </div>
-        <h1 className="text-4xl font-bold mb-4">Vite + React</h1>
-        <div className="card bg-white text-gray-900 rounded shadow p-6 mb-4">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            count is {count}
-          </button>
-          <p className="mt-2">
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-        </div>
+        <h1 className="text-4xl font-bold mb-4 text-center">Vite + React</h1>
 
         <div className="my-8" />
         <UI />
         <div className="my-8" />
-        <Test />
-        <div className="my-8" />
+        {/* <Test /> */}
+
       </div>
     </div>
   );

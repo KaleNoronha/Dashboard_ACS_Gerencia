@@ -1,117 +1,137 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactECharts from "echarts-for-react";
+import { fetchACS } from "../../services/api";
 import '../../Styles/Querys/Querys.css'
+
+const STATUS_MAP = {
+  Y: "Correcta",
+  N: "Cancelada",
+  U: "Incompleta",
+};
+const COLORS = {
+  Correcta: "#2CAFFE",
+  Cancelada: "#FF5E5E",
+  Incompleta: "#FFA500",
+};
 
 const EChartsMasterDetail = () => {
   const [rawData, setRawData] = useState({});
   const [filteredData, setFilteredData] = useState({});
   const [range, setRange] = useState([null, null]);
-  const [categoryFilter, setCategoryFilter] = useState({
-    correcta: true,
-    cancelada: false,
-    incompleta: false,
-  });
   const masterRef = useRef(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      const response = await fetch("http://localhost:3001/api/transacciones");
-      const jsonData = await response.json();
+    const fetchData = async () => {
+      const bodyACS = {
+        size: 10000,
+        from: 0,
+        query: {
+          bool: {
+            filter: [
+              { match: { "TDS_TRANSACTION.issuerId": "041" } },
+              {
+                range: {
+                  "TDS_TRANSACTION.createdAt": {
+                    gte: "2024-01-01T00:00:00",
+                    lte: "2025-06-30T20:10:11"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        _source: [
+          "TDS_ARES.transStatus",
+          "TDS_TRANSACTION.createdAt",
+          "TDS_AREQ.purchaseAmount",
+        ],
+        sort: [
+          { "TDS_TRANSACTION.createdAt": { order: "desc" } },
+          "_score"
+        ]
+      };
 
-      const fromDate = new Date(2024, 0, 1); // 1 Enero 2024
-      const toDate = new Date(2024, 12, 31); // 15 de agosto 2024
+      try {
+        const data = await fetchACS(bodyACS);
 
-      const groupedByCategory = {};
-
-      jsonData.forEach((row) => {
-        const date = new Date(row.fecha);
-
-        if (date >= fromDate && date <= toDate) {
-          // 🎯 Filtrar solo 2024 Enero a Julio
-          const categoria = row.categoria;
-          const dayKey = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate()
-          ).getTime();
-          const monto = parseFloat(row.monto);
+        // Agrupar por categoría (status traducido) y día
+        const groupedByCategory = {};
+        data.forEach(hit => {
+          const s = hit._source || {};
+          const rawStatus = s.TDS_ARES?.transStatus;
+          const categoria = STATUS_MAP[rawStatus];
+          const date = s.TDS_TRANSACTION?.createdAt?.slice(0, 10);
+          const monto = parseFloat(s.TDS_AREQ?.purchaseAmount) || 0;
+          if (!categoria || !date) return;
 
           if (!groupedByCategory[categoria]) groupedByCategory[categoria] = {};
-          if (!groupedByCategory[categoria][dayKey])
-            groupedByCategory[categoria][dayKey] = [];
-          groupedByCategory[categoria][dayKey].push(monto);
-        }
-      });
+          if (!groupedByCategory[categoria][date]) groupedByCategory[categoria][date] = [];
+          groupedByCategory[categoria][date].push(monto);
+        });
 
-      const averagedByCategory = {};
+        // Calcula el promedio diario por categoría
+        const averagedByCategory = {};
+        Object.entries(groupedByCategory).forEach(([categoria, data]) => {
+          averagedByCategory[categoria] = Object.entries(data)
+            .map(([date, montos]) => {
+              const avg = montos.reduce((a, b) => a + b, 0) / montos.length;
+              return { value: [new Date(date).getTime(), +avg.toFixed(2)] };
+            })
+            .sort((a, b) => a.value[0] - b.value[0]);
+        });
 
-      Object.entries(groupedByCategory).forEach(([categoria, data]) => {
-        averagedByCategory[categoria] = Object.entries(data)
-          .map(([timestamp, montos]) => {
-            const avg = montos.reduce((a, b) => a + b, 0) / montos.length;
-            return { value: [parseInt(timestamp), parseFloat(avg.toFixed(2))] };
-          })
-          .sort((a, b) => a.value[0] - b.value[0]);
-      });
+        setRawData(averagedByCategory);
 
-      setRawData(averagedByCategory);
-
-      const refCat = "correcta";
-      const initial = averagedByCategory[refCat]?.slice(-100) || [];
-      setRange([
-        initial[0]?.value[0] || null,
-        initial[initial.length - 1]?.value[0] || null,
-      ]);
+        // Inicializa rango con los últimos 100 de "Correcta"
+        const refCat = "Correcta";
+        const initial = averagedByCategory[refCat]?.slice(-100) || [];
+        setRange([
+          initial[0]?.value[0] || null,
+          initial[initial.length - 1]?.value[0] || null,
+        ]);
+      } catch (err) {
+        console.error(err);
+      }
     };
-    loadData();
+
+    fetchData();
   }, []);
 
   useEffect(() => {
     if (!range[0] || !range[1]) return;
     const filtered = {};
     Object.entries(rawData).forEach(([cat, data]) => {
-      if (categoryFilter[cat]) {
-        filtered[cat] = data.filter(
-          ({ value }) => value[0] >= range[0] && value[0] <= range[1]
-        );
-      }
+      filtered[cat] = data.filter(
+        ({ value }) => value[0] >= range[0] && value[0] <= range[1]
+      );
     });
     setFilteredData(filtered);
-  }, [range, rawData, categoryFilter]);
+  }, [range, rawData]);
 
-  const getSeries = (data) => {
-    const colors = {
-      correcta: "#2CAFFE",
-      cancelada: "#FF5E5E",
-      incompleta: "#FFA500",
-    };
-
-    return Object.entries(data).map(([cat, points]) => ({
-      name: `${cat.charAt(0).toUpperCase() + cat.slice(1)} (Promedio Diario)`,
-      type: "line",
-      smooth: true,
-      data: points.map((p) => p.value),
-      symbol: "none",
-      lineStyle: { width: 2, color: colors[cat] },
-    }));
-  };
   useEffect(() => {
     const resize = () => {
       masterRef.current?.getEchartsInstance().resize();
     };
-
     window.addEventListener("resize", resize);
     setTimeout(resize, 300);
-
     return () => window.removeEventListener("resize", resize);
   }, []);
 
+  const legendKeys = ["Correcta", "Cancelada", "Incompleta"];
+
+  const getSeries = (data) =>
+    legendKeys.map((cat) => ({
+      name: cat,
+      type: "line",
+      smooth: true,
+      data: (data[cat] || []).map((p) => p.value),
+      symbol: "none",
+      lineStyle: { width: 2, color: COLORS[cat] },
+      areaStyle: { opacity: 0.3, color: COLORS[cat] },
+      showSymbol: false,
+    }));
+
   const detailOption = {
-    // title: {
-    //   text: "Transacciones Promedio Diario: Enero a Julio 2024",
-    //   left: "center",
-    //   size: 10,
-    // },
     tooltip: {
       trigger: "axis",
       formatter: (params) => {
@@ -123,10 +143,7 @@ const EChartsMasterDetail = () => {
     },
     legend: {
       top: 30,
-      data: Object.keys(filteredData).map(
-        (cat) =>
-          `${cat.charAt(0).toUpperCase() + cat.slice(1)} (Promedio Diario)`
-      ),
+      data: legendKeys,
     },
     grid: {
       top: 80,
@@ -142,6 +159,18 @@ const EChartsMasterDetail = () => {
     yAxis: {
       type: "value",
       name: "Soles (S/.)",
+      axisLabel: {
+        formatter: function (value) {
+          if (value >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+          if (value >= 1e3) return (value / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+          return value;
+        },
+      },
+    },
+    dataZoom: {
+      type: 'inside',
+      start: 0,
+      end: 100
     },
     series: getSeries(filteredData),
   };
@@ -201,18 +230,14 @@ const EChartsMasterDetail = () => {
     });
   };
 
-  const toggleCategory = (cat) => {
-    setCategoryFilter((prev) => ({ ...prev, [cat]: !prev[cat] }));
-  };
-
   return (
     <div className="contenedor">
       <div>
-        <div >
+        <div>
           <ReactECharts option={detailOption} className="detalles" />
         </div>
         <div
-          style={{ width: "100%", marginTop:'-30px'}}
+          style={{ width: "100%", marginTop: '-30px' }}
           className="contenedor-master"
         >
           <ReactECharts
@@ -223,20 +248,6 @@ const EChartsMasterDetail = () => {
             className="master"
           />
         </div>
-      </div>
-      <div className="contenedor-botones">
-        {["correcta", "cancelada", "incompleta"].map((cat) => (
-          <button
-            key={cat}
-            onClick={() => toggleCategory(cat)}
-            style={{
-              backgroundColor: categoryFilter[cat] ? "#007bff" : "#ccc",
-            }}
-            className="botones"
-          >
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </button>
-        ))}
       </div>
     </div>
   );

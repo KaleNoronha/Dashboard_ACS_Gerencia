@@ -18,7 +18,7 @@ export default function DashboardTransaccionesACS() {
             {
               range: {
                 "TDS_TRANSACTION.createdAt": {
-                  gte: "2025-01-01T00:00:00",
+                  gte: "2024-01-01T00:00:00",
                   lte: "2025-06-30T20:10:11"
                 }
               }
@@ -133,8 +133,8 @@ export default function DashboardTransaccionesACS() {
         return total.toLocaleString();
       },
       color: "#7D818D",
-      fontWeight: "bold",
-      fontSize: 15
+      fontWeight: "",
+      fontSize: 12
     },
     itemStyle: { color: "transparent" }, // Cambiado a transparente
     silent: true // No interactúa con hover/click
@@ -156,11 +156,11 @@ export default function DashboardTransaccionesACS() {
 
   const option = {
     title: {
-      text: "Transacciones por Comercio (TOP 10)",
+      text: "Transacciones por Comercio (Top 10)",
       left: "center",
       textStyle: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: ''
       }
     },
     tooltip: {
@@ -181,12 +181,15 @@ export default function DashboardTransaccionesACS() {
     },
     legend: {
       bottom: 0,
-      itemGap: 10,
-      selectedMode: true // predeterminado: permite seleccionar/deseleccionar marcas
+      itemGap: 15,
+      selectedMode: true,
+      textStyle: {
+        fontSize: 10
+      }
     },
     grid: {
-      left: '0%',
-      right: '5%',
+      left: '5%',
+      right: '15%',
       top: '15%',
       bottom: '20%',
       containLabel: true
@@ -195,6 +198,7 @@ export default function DashboardTransaccionesACS() {
       type: 'value',
       max: xAxisMax,
       axisLabel: {
+        fontSize: 10,
         formatter: function (value) {
           if (value >= 1000000) {
             return (value / 1000000).toFixed(1) + "M";
@@ -212,7 +216,8 @@ export default function DashboardTransaccionesACS() {
       axisLabel: {
         interval: 0,
         width: 50,
-        overflow: 'truncate'
+        overflow: 'truncate',
+        fontSize: 10
       }
     },
     series
