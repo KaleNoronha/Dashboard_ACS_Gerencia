@@ -40,8 +40,8 @@ const UI = () => {
             <Echarts2 />
           </div>
           <div className="card-tablas">
-            <div>
-              <h3>Protocolos</h3>
+            <div className="flex items-center justify-center">
+              <h3 className="text-center text-lg font-semibold">Estado de Protocolos</h3>
             </div>
             <div className="titulo-tablas">
               <h5>Estado</h5>
@@ -55,21 +55,8 @@ const UI = () => {
         </article>
         <article className="conteiner-inferior">
           <div className="card-tablas2">
-            <div>
-              <h3>Bines</h3>
-              {/* <select
-                id="bin-select"
-                className="card-tablas2-select"
-                value={""}
-                onChange={(e) => setSelectedBin(e.target.value)}
-              >
-                <option value="">BIN</option>
-                {bins?.map((b) => (
-                  <option key={b.bin_prefix} value={b.bin_prefix}>
-                    {b.bin_prefix}
-                  </option>
-                ))}
-              </select> */}
+            <div className="flex items-center justify-center">
+              <h3 className="text-center text-lg font-semibold">Transacciones por Adquirente</h3>
             </div>
             <div className="titulo-tablas">
               <h5>AcquirerMerchantID</h5>
@@ -77,11 +64,7 @@ const UI = () => {
               <h5>%Q TRX</h5>
             </div>
             <div>
-              <TableBines
-              // bin={selectedBin}
-              // tranx={selectedTranx}
-              // top_bin={topBin ? "1" : "0"}
-              />
+              <TableBines />
             </div>
           </div>
           <div className="card-graficos2">

@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchACS } from "../../services/api";
 import { Transaction } from "../../Icons/Transaction"
 
-
 export default function TotalTransaccionesACS() {
-    const [total, setTotal] = useState(null);
+    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [displayTotal, setDisplayTotal] = useState(0);
+    const animRef = useRef();
 
     useEffect(() => {
         const bodyACS = {
@@ -38,13 +39,37 @@ export default function TotalTransaccionesACS() {
         };
 
         fetchACS(bodyACS)
-            .then(hits => setTotal(hits.length))
-            .catch((e) => setError(e.message))
-            .finally(() => setLoading(false));
+            .then(hits => {
+                setTotal(hits.length);
+                setLoading(false);
+            })
+            .catch((e) => {
+                setError(e.message);
+                setLoading(false);
+            });
     }, []);
 
-    if (loading) return <span>Cargando…</span>;
-    if (error) return <span className="text-red-600">Error: {error}</span>;
+    // Animación de conteo
+    useEffect(() => {
+        if (!loading && !error) {
+            const duration = 1200; // ms
+            const startTime = performance.now();
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(progress * total);
+                setDisplayTotal(value);
+                if (progress < 1) {
+                    animRef.current = requestAnimationFrame(animate);
+                } else {
+                    setDisplayTotal(total);
+                }
+            }
+            animRef.current = requestAnimationFrame(animate);
+            return () => cancelAnimationFrame(animRef.current);
+        }
+    }, [loading, error, total]);
 
     function formatAbbreviatedNumber(num) {
         if (num >= 1e9) return (num / 1e9).toFixed(2) + "B";
@@ -52,13 +77,15 @@ export default function TotalTransaccionesACS() {
         if (num >= 1e3) return (num / 1e3).toFixed(2) + "K";
         return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-    // Solo muestra el número (puedes retornarlo como prop, estado, etc.)
+
+    if (error) return <span className="text-red-600">Error: {error}</span>;
+
     return (
         <div className="flex items-center">
             <div className="flex-1">
                 <div className="text-gray-500 text-sm">Total Transacciones</div>
                 <div className="text-3xl font-bold text-black mt-1">
-                    {formatAbbreviatedNumber(total)}
+                    {formatAbbreviatedNumber(displayTotal)}
                 </div>
             </div>
             <div className="ml-4">

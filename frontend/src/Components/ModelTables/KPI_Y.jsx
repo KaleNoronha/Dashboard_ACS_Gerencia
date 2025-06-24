@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchACS } from "../../services/api";
 import { Aceptadas } from "../../Icons/Aceptadas";
 
@@ -10,9 +10,11 @@ function formatAbbreviatedNumber(num) {
 }
 
 export default function KPI_Y() {
-    const [total, setTotal] = useState(null);
+    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [displayTotal, setDisplayTotal] = useState(0);
+    const animRef = useRef();
 
     useEffect(() => {
         const bodyACS = {
@@ -45,12 +47,38 @@ export default function KPI_Y() {
         };
 
         fetchACS(bodyACS)
-            .then(hits => setTotal(hits.length))
-            .catch((e) => setError(e.message))
-            .finally(() => setLoading(false));
+            .then(hits => {
+                setTotal(hits.length);
+                setLoading(false);
+            })
+            .catch((e) => {
+                setError(e.message);
+                setLoading(false);
+            });
     }, []);
 
-    if (loading) return <span>Cargando…</span>;
+    // Animación de conteo
+    useEffect(() => {
+        if (!loading && !error) {
+            const duration = 1200; // ms
+            const startTime = performance.now();
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(progress * total);
+                setDisplayTotal(value);
+                if (progress < 1) {
+                    animRef.current = requestAnimationFrame(animate);
+                } else {
+                    setDisplayTotal(total);
+                }
+            }
+            animRef.current = requestAnimationFrame(animate);
+            return () => cancelAnimationFrame(animRef.current);
+        }
+    }, [loading, error, total]);
+
     if (error) return <span className="text-red-600">Error: {error}</span>;
 
     return (
@@ -58,11 +86,11 @@ export default function KPI_Y() {
             <div className="flex-1">
                 <div className="text-gray-500 text-sm">Transacciones Aceptadas</div>
                 <div className="text-3xl font-bold text-black ">
-                    {formatAbbreviatedNumber(total)}
+                    {formatAbbreviatedNumber(displayTotal)}
                 </div>
             </div>
-            <div >
-                <Aceptadas className="w-5 h-10 text-green-500" />
+            <div>
+                <Aceptadas className="w-10 h-10 text-green-500" />
             </div>
         </div>
     );
