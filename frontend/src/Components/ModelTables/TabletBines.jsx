@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState} from "react";
 import "../../Styles/Querys/Querys.css";
 import { fetchACS } from "../../services/api";
 
-const TabletBines = ({ bin, tranx, top_bin }) => {
+const TabletBines = () => {
   const [hits, setHits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

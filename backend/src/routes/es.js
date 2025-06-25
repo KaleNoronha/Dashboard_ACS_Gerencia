@@ -7,7 +7,12 @@ const router = Router();
 router.post("/ssm", async (req, res) => {
   try {
     const hits = await search(req.body, "/ssm_transactions_new/_search");
-    res.json(hits);
+    if (!hits) {
+      res.status(204).json({ error: "Sin contenido (No Content)" }); // 204: No Content, pero igual das JSON
+    } else {
+      res.json(hits);
+    }
+    console.log("Respuesta de search:", hits);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -17,7 +22,12 @@ router.post("/ssm", async (req, res) => {
 router.post("/scm", async (req, res) => {
   try {
     const hits = await search(req.body, "/scm_transactions/_search");
-    res.json(hits);
+    if (!hits) {
+      res.status(204).json({ error: "Sin contenido (No Content)" }); // 204: No Content, pero igual das JSON
+    } else {
+      res.json(hits);
+    }
+    console.log("Respuesta de search:", hits); // Nunca responde vacío
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

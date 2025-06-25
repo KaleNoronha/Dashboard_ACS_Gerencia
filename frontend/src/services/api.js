@@ -1,4 +1,5 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+// const url = 'https://dashboard-acs-gerencia.onrender.com';
+// const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
   const res = await fetch(`${API_BASE_URL}/api/es/ssm`, {
@@ -12,7 +13,20 @@ export async function fetch3DS(body) {
     throw new Error(`Error ${res.status}: ${text}`);
   }
 
-  return res.json();
+  // Leer la respuesta como texto primero
+  const text = await res.text();
+
+  // Si la respuesta está vacía, lanza un error personalizado
+  if (!text) {
+    throw new Error("Respuesta vacía del backend");
+  }
+
+  // Intenta parsear el texto como JSON
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error("Respuesta del backend no es JSON válido");
+  }
 }
 
 export async function fetchACS(body) {
@@ -26,5 +40,19 @@ export async function fetchACS(body) {
     const text = await res.text();
     throw new Error(`Error ${res.status}: ${text}`);
   }
-  return res.json();
+
+  // Leer la respuesta como texto primero
+  const text = await res.text();
+
+  // Si la respuesta está vacía, lanza un error personalizado
+  if (!text) {
+    throw new Error("Respuesta vacía del backend");
+  }
+
+  // Intenta parsear el texto como JSON
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error("Respuesta del backend no es JSON válido");
+  }
 }
