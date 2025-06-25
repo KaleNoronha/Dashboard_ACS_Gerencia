@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import fetch from "node-fetch"; // Si usas Node >=18, puedes quitar esto y usar el fetch global
-
 const ES_HOST = process.env.ES_HOST;
 const ES_AUTH = process.env.ES_AUTH;
 
@@ -35,7 +33,7 @@ export async function search(body, indexPath) {
     } catch (e) {
       throw new Error("Respuesta de Elasticsearch no es JSON válido");
     }
-
+    
     // Devuelve hits.hits si existe, sino un array vacío
     return data.hits && data.hits.hits ? data.hits.hits : [];
   } catch (e) {
