@@ -1,5 +1,4 @@
-// const url = 'https://dashboard-acs-gerencia.onrender.com';
-// const API_BASE_URL = url;
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 export async function fetch3DS(body) {
   const res = await fetch(`${API_BASE_URL}/api/es/ssm`, {
