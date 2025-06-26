@@ -1,4 +1,4 @@
-const url = 'http://192.168.68.133:4000';
+const url = 'https://dashboard-acs-gerencia.onrender.com';
 const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
