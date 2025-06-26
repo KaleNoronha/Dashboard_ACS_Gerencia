@@ -1,4 +1,4 @@
-const url = 'https://dashboard-acs-gerencia.onrender.com';
+const url = 'https://dc27-190-81-172-25.ngrok-free.app';
 const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
