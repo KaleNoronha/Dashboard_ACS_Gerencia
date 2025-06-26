@@ -77,7 +77,7 @@ const AreaChartHighchartsStyle = () => {
     }));
   const option = {
     title: {
-      text: "Cantidad de transacciones por año",
+      text: "Cantidad de transacciones por Mes",
       left: 'center',
     },
     subtitle: {

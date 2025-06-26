@@ -1,8 +1,8 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-
+const url = 'http://192.168.68.133:4000';
+const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
-  const res = await fetch(`http://localhost:4000/api/es/ssm`, {
+  const res = await fetch(`${API_BASE_URL}/api/es/ssm`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -30,8 +30,7 @@ export async function fetch3DS(body) {
 }
 
 export async function fetchACS(body) {
-    const res = await fetch(`${API_BASE_URL}/api/es/scm`, {
- 
+  const res = await fetch(`${API_BASE_URL}/api/es/scm`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
