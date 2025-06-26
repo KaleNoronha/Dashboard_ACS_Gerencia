@@ -36,6 +36,7 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT ;
-app.listen(port, () => {
-  console.log(`⚡️ Backend escuchando en ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`⚡️ Backend accesible en red en http://192.168.68.133:${port}`);
 });
+
