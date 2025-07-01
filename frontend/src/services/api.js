@@ -1,8 +1,8 @@
-const url = 'https://5b7c-190-81-172-25.ngrok-free.app';
-const API_BASE_URL = url;
+// const url = 'https://768a-190-81-172-25.ngrok-free.app';
+// const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
-  const res = await fetch(`${API_BASE_URL}/api/es/ssm`, {
+  const res = await fetch(`http://localhost:4000/api/es/ssm`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -30,7 +30,7 @@ export async function fetch3DS(body) {
 }
 
 export async function fetchACS(body) {
-  const res = await fetch(`${API_BASE_URL}/api/es/scm`, {
+  const res = await fetch(`http://localhost:4000/api/es/scm`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
