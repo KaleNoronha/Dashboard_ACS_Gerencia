@@ -1,4 +1,4 @@
-const url = 'https://21554c363ffa.ngrok-free.app';
+const url = 'https://c0fa9467680b.ngrok-free.app';
 const API_BASE_URL = url;
 
 export async function fetch3DS(body) {
