@@ -57,7 +57,7 @@ const AreaChartHighchartsStyle = () => {
     });
     const codigosStatus = ['Y', 'N', 'U'];
     const nombresStatus = { 'Y': 'Aceptadas', 'N': 'Negadas', 'U': 'Incompletas' };
-    const coloresStatus = { 'Y': '#09E377', 'N': '#fe1515', 'U': '#f7ff00' };
+    const coloresStatus = { 'Y': '#09E377', 'N': '#FE1515', 'U': '#F7FF00' };
 
     // Meses ordenados (X)
     const meses = Object.keys(resumenPorMesYStatus).sort();
